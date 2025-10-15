@@ -22,43 +22,63 @@ body{ background:#f6f7fb; }
     .event-card:hover{ transform:translateY(-3px); box-shadow:0 10px 24px rgba(0,0,0,.1); }
 
     .tech{
-      border-top:4px solid #5cc6ff;
+      border-top:4px solid rgb(115, 185, 192);
     }
     .arts{
-      border-top:4px solid #ff7ab6;
+      border-top:4px solid rgb(195, 110, 179);
     }
     .sports{
-      border-top:4px solid #38d39f;
+      border-top:4px solid rgb(158, 192, 67);
     }
     .career{
-      border-top:4px solid #8b8bff;
+      border-top:4px solid rgb(220, 111, 48);
     }
 
      /* --- Chip accent colors --- */
     .chip.accent-grey {
       border-color: #616161; color: #616161;
     }
-    .chip.accent-pink { border-color: #ff7ab6; color: #ff7ab6; }
-    .chip.accent-sky { border-color: #5cc6ff; color: #5cc6ff; }
-    .chip.accent-mint { border-color: #38d39f; color: #38d39f; }
-    .chip.accent-lav { border-color: #8b8bff; color: #8b8bff; }
+    .chip.accent-pink { border-color: rgb(195, 110, 179); color: rgb(195, 110, 179); }
+    .chip.accent-sky { border-color: rgb(115, 185, 192); color: rgb(115, 185, 192); }
+    .chip.accent-mint { border-color: rgb(158, 192, 67); color: rgb(158, 192, 67); }
+    .chip.accent-lav { border-color: rgb(220, 111, 48); color: rgb(220, 111, 48); }
+
+    .chip.accent-grey:hover {
+      background: #616161; color: #fff;
+    }
+    .chip.accent-pink:hover { background: rgb(195, 110, 179); color: #fff; }
+    .chip.accent-sky:hover { background: rgb(115, 185, 192); color: #fff; }
+    .chip.accent-mint:hover { background: rgb(158, 192, 67); color: #fff; }
+    .chip.accent-lav:hover { background: rgb(220, 111, 48); color: #fff; }
 
     /* Active chip state — fills with colour */
-    .chip.accent-pink.active { background: #ff7ab6; color: #fff; }
-    .chip.accent-sky.active { background: #5cc6ff; color: #fff; }
-    .chip.accent-mint.active { background: #38d39f; color: #fff; }
-    .chip.accent-lav.active { background: #8b8bff; color: #fff; }
+    .chip.accent-grey.active {
+      background: #616161; color: #fff;
+    }
+    .chip.accent-pink.active { background: rgb(195, 110, 179); color: #fff; }
+    .chip.accent-sky.active { background: rgb(115, 185, 192); color: #fff; }
+    .chip.accent-mint.active { background: rgb(158, 192, 67); color: #fff; }
+    .chip.accent-lav.active { background: rgb(220, 111, 48); color: #fff; }
 
     #navbarid{
-      background-color: rgb(194, 222, 255);
+      background-color: #041373;
       border-width: 2px;
       border-color: #041373;
       margin-bottom: 40px;
-      font-family:Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    .nvit{
+      color: rgb(255, 255, 251);
+      font-family:sans-serif;
+    }
+
+    .nvit:hover{
+      color: rgb(191, 156, 96);
     }
 
     #navitems{
       padding-left: 10px;
+      padding-bottom: 1px;
       display:flex; align-items:center; justify-content:center;
     }
 
@@ -76,7 +96,7 @@ body{ background:#f6f7fb; }
       height: 2px; /* Height set to 2px */
       bottom: 0; /* Positioned at the bottom */
       left: 0; /* Positioned at the left */
-      background-color: #041373; /* Background color set to #0087ca */
+      background-color: rgb(191, 156, 96); /* Background color set to #0087ca */
       transform-origin: bottom right; /* Origin of transformation set to bottom right */
       transition: transform 0.50s ease-out; /* Transition property for smooth animation */
     }
