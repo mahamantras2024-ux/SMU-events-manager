@@ -124,7 +124,7 @@ function googleCalUrl({title, startISO, endISO, location, details=""}){
 /* =========================
    UI templates & rendering
    ========================= */
-function cardTemplate(e, accentClass, isSaved, hasClashAgainstOthers){
+function cardTemplate(e, isSaved, hasClashAgainstOthers){
   // Show red badge only when NOT saved and there is a clash with others
   const showClash = !isSaved && hasClashAgainstOthers;
 
@@ -136,7 +136,7 @@ function cardTemplate(e, accentClass, isSaved, hasClashAgainstOthers){
   const saveBtnClasses = `btn ${isSaved ? 'btn-success' : (showClash ? 'btn-outline-secondary' : 'btn-outline-primary')} btn-sm`;
 
   return `
-<div class="event-card ${accentClass}">
+<div class="event-card ${e.categories[0]}">
   <img class="event-thumb" src="${e.img}" alt="${e.title}">
   <div class="event-body">
     <div class="d-flex justify-content-between align-items-start">
