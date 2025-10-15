@@ -17,6 +17,11 @@ body{ background:#f6f7fb; }
     .accent-mint{ border-top:4px solid #38d39f; }
     .accent-lav{ border-top:4px solid #8b8bff; }
 
+    .event-card.accent-pink{ border-top:4px solid #ff7ab6; }
+    .event-card.accent-sky{ border-top:4px solid #5cc6ff; }
+    .event-card.accent-mint{ border-top:4px solid #38d39f; }
+    .event-card.accent-lav{ border-top:4px solid #8b8bff; }
+
     .event-thumb{ width:100%; height:150px; object-fit:cover; border-bottom:1px solid #eee; }
     .event-body{ padding:14px 16px; }
     .event-title{ font-weight:700; font-size:1.06rem; margin:0 0 6px; color:#121926; }
