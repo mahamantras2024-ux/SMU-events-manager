@@ -24,6 +24,11 @@ body{ background:#f6f7fb; }
     .chip.accent-mint.active { background: #38d39f; color: #fff; }
     .chip.accent-lav.active { background: #8b8bff; color: #fff; }
 
+    .event-card.accent-lav{
+      
+      border-color:#8b8bff;
+    }
+
     .event-thumb{ width:100%; height:150px; object-fit:cover; border-bottom:1px solid #eee; }
     .event-body{ padding:14px 16px; }
     .event-title{ font-weight:700; font-size:1.06rem; margin:0 0 6px; color:#121926; }
