@@ -12,16 +12,16 @@ body{ background:#f6f7fb; }
     .event-card:hover{ transform:translateY(-3px); box-shadow:0 10px 24px rgba(0,0,0,.1); }
 
     .tech{
-      border-color: #5cc6ff; color: #5cc6ff;
+      border-top:4px solid #5cc6ff;
     }
     .arts{
-      border-color: #ff7ab6; color: #ff7ab6;
+      border-top:4px solid #ff7ab6;
     }
     .sports{
-      border-color: #38d39f; color: #38d39f;
+      border-top:4px solid #38d39f;
     }
     .career{
-      border-color: #8b8bff; color: #8b8bff;
+      border-top:4px solid #8b8bff;
     }
 
      /* --- Chip accent colors --- */
