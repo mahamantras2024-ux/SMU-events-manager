@@ -25,6 +25,7 @@
       <a class="nav-item nav-link active ula" href="#">Events <span class="sr-only"></span></a>
       <a class="nav-item nav-link ula" href="#">Daily Challenge</a>
       <a class="nav-item nav-link ula" href="#">Account</a>
+      <a class="nav-item nav-link ula" href="my_events.html">My Events</a>
     </div>
   </div>
   </nav>
@@ -53,193 +54,232 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+/* =========================
+   DATA (with ISO datetimes)
+   ========================= */
 const events = [
-  {
-    title:"HackSMU: 24-Hour Hackathon",
-    dateText:"Fri, 5 Dec 2025",
-    timeText:"7:00 PM → Sat, 7:00 PM",
-    locText:"SIS Building",
-    img:"hackathon.png",
-    categories:["tech"],
-    startISO:"2025-12-05T19:00:00+08:00",
-    endISO:"2025-12-06T19:00:00+08:00"
-  },
-  {
-    title:"Open Mic & Poetry Slam",
-    dateText:"Fri, 12 Dec 2025",
-    timeText:"8:00–10:30 PM",
-    locText:"Concourse Hall",
-    img:"mic.jpeg",
-    categories:["arts"],
-    startISO:"2025-12-12T20:00:00+08:00",
-    endISO:"2025-12-12T22:30:00+08:00"
-  },
-  {
-    title:"Finance Forum: Markets 2025",
-    dateText:"Wed, 10 Dec 2025",
-    timeText:"5:30–7:30 PM",
-    locText:"Shaw Alumni House",
-    img:"finance.png",
-    categories:["career"],
-    startISO:"2025-12-10T17:30:00+08:00",
-    endISO:"2025-12-10T19:30:00+08:00"
-  },
-  {
-    title:"Skatathon 2025",
-    dateText:"Fri, 19 Dec 2025",
-    timeText:"7:00–9:00 PM",
-    locText:"Fort Canning Park",
-    img:"skate.jpeg",
-    categories:["sports"],
-    startISO:"2025-12-19T19:00:00+08:00",
-    endISO:"2025-12-19T21:00:00+08:00"
-  },
-  {
-    title:"Art Jamming & Chill",
-    dateText:"Sat, 22 Nov 2025",
-    timeText:"2:00–5:00 PM",
-    locText:"Tanjong Hall",
-    img:"art.jpg",
-    categories:["arts"],
-    startISO:"2025-11-22T14:00:00+08:00",
-    endISO:"2025-11-22T17:00:00+08:00"
-  },
-  {
-    title:"AI & Robotics Demo Day",
-    dateText:"Sat, 6 Dec 2025",
-    timeText:"10:00 AM–1:00 PM",
-    locText:"SMU Labs",
-    img:"robotics.webp",
-    categories:["tech"],
-    startISO:"2025-12-06T10:00:00+08:00",
-    endISO:"2025-12-06T13:00:00+08:00"
-  },
-  {
-    title:"Eco-Smart Upcycling Workshop",
-    dateText:"Sat, 13 Dec 2025",
-    timeText:"3:00–6:00 PM",
-    locText:"T3 Lobby",
-    img:"upcycling.jpg",
-    categories:["arts"],
-    startISO:"2025-12-13T15:00:00+08:00",
-    endISO:"2025-12-13T18:00:00+08:00"
-  },
-  {
-    title:"Career Coffee Chats",
-    dateText:"Thu, 4 Dec 2025",
-    timeText:"4:00–6:00 PM",
-    locText:"LKCSB Atrium",
-    img:"chat.webp",
-    categories:["career"],
-    startISO:"2025-12-04T16:00:00+08:00",
-    endISO:"2025-12-04T18:00:00+08:00"
-  }
+  {title:"HackSMU: 24-Hour Hackathon",dateText:"Fri, 5 Dec 2025",timeText:"7:00 PM → Sat, 7:00 PM",locText:"SIS Building",img:"hackathon.png",categories:["tech"],startISO:"2025-12-05T19:00:00+08:00",endISO:"2025-12-06T19:00:00+08:00"},
+  {title:"Open Mic & Poetry Slam",dateText:"Fri, 12 Dec 2025",timeText:"8:00–10:30 PM",locText:"Concourse Hall",img:"mic.jpeg",categories:["arts"],startISO:"2025-12-12T20:00:00+08:00",endISO:"2025-12-12T22:30:00+08:00"},
+  {title:"Finance Forum: Markets 2025",dateText:"Wed, 10 Dec 2025",timeText:"5:30–7:30 PM",locText:"Shaw Alumni House",img:"finance.png",categories:["career"],startISO:"2025-12-10T17:30:00+08:00",endISO:"2025-12-10T19:30:00+08:00"},
+  {title:"Skatathon 2025",dateText:"Fri, 19 Dec 2025",timeText:"7:00–9:00 PM",locText:"Fort Canning Park",img:"skate.jpeg",categories:["sports"],startISO:"2025-12-19T19:00:00+08:00",endISO:"2025-12-19T21:00:00+08:00"},
+  {title:"Art Jamming & Chill",dateText:"Sat, 22 Nov 2025",timeText:"2:00–5:00 PM",locText:"Tanjong Hall",img:"art.jpg",categories:["arts"],startISO:"2025-11-22T14:00:00+08:00",endISO:"2025-11-22T17:00:00+08:00"},
+  {title:"AI & Robotics Demo Day",dateText:"Sat, 6 Dec 2025",timeText:"10:00 AM–1:00 PM",locText:"SMU Labs",img:"robotics.webp",categories:["tech"],startISO:"2025-12-06T10:00:00+08:00",endISO:"2025-12-06T13:00:00+08:00"},
+  {title:"Eco-Smart Upcycling Workshop",dateText:"Sat, 13 Dec 2025",timeText:"3:00–6:00 PM",locText:"T3 Lobby",img:"upcycling.jpg",categories:["community"],startISO:"2025-12-13T15:00:00+08:00",endISO:"2025-12-13T18:00:00+08:00"},
+  {title:"Career Coffee Chats",dateText:"Sat, 22 Nov 2025",timeText:"4:00–6:00 PM",locText:"LKCSB Atrium",img:"chat.webp",categories:["career"],startISO:"2025-11-22T14:00:00+08:00",endISO:"2025-11-22T17:00:00+08:00"}
 ];
 
-function cardTemplate(e){return`
-<div class="event-card ${e.categories[0]}">
-  <img class="event-thumb" src="${e.img}" alt="${e.title}">
-  <div class="event-body">
-    <h5 class="event-title">${e.title}</h5>
-    <ul class="meta-list">
-      <li><i class="bi bi-calendar2-event"></i>${e.dateText}</li>
-      <li><i class="bi bi-clock"></i>${e.timeText}</li>
-      <li><i class="bi bi-geo-alt"></i>${e.locText}</li>
-    </ul>
-    <div class="event-actions d-flex gap-2">
-      <a class="btn btn-primary btn-sm"
-      href="#"
-      data-add-to-gcal
-      data-title="${e.title}"
-      data-location="${e.locText}"
-      data-start="${e.startISO}"
-      data-end="${e.endISO}">
-      <i class="bi bi-calendar-plus me-1"></i>Add to Calendar
-      </a>
-      <a class="btn btn-outline-secondary btn-sm" href="#">Details</a>
-    </div>
-  </div>
-</div>`;}
+/* Category → accent class */
+const ACCENT = {
+  tech:'accent-sky',
+  arts:'accent-pink',
+  sports:'accent-mint',
+  career:'accent-lav',
+  community:'accent-mint'
+};
 
-function renderCarousel(list){
-  const inner=document.getElementById('carouselInner');
-  const dots=document.getElementById('carouselDots');
-  inner.innerHTML=''; dots.innerHTML='';
-  for(let i=0;i<list.length;i+=4){
-    const chunk=list.slice(i,i+4);
-    const cols=chunk.map(ev=>`<div class="col-12 col-sm-6 col-lg-3">${cardTemplate(ev)}</div>`).join('');
-    inner.innerHTML+=`<div class="carousel-item${i===0?' active':''}"><div class="row g-3">${cols}</div></div>`;
-    dots.innerHTML+=`<button type="button" data-bs-target="#eventsCarousel" data-bs-slide-to="${i/4}" class="${i===0?'active':''}" aria-label="Slide ${i/4+1}"></button>`;
-  }
-}
-let current='all';
-function applyFilter(){
-  const filtered=current==='all'?events:events.filter(e=>e.categories.includes(current));
-  renderCarousel(filtered);
-  bootstrap.Carousel.getOrCreateInstance('#eventsCarousel').to(0);
-}
-document.getElementById('filters').addEventListener('click',e=>{
-  const chip=e.target.closest('.chip'); if(!chip)return;
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-  chip.classList.add('active');
-  current=chip.dataset.filter;
-  applyFilter();
-});
+/* =========================
+   Local “My Events” store
+   ========================= */
+const MY_EVENTS_KEY = 'smu_my_events_v1';
+const loadMyEvents = () => { try { return JSON.parse(localStorage.getItem(MY_EVENTS_KEY)) || [] } catch { return [] } };
+const saveMyEvents = (list) => localStorage.setItem(MY_EVENTS_KEY, JSON.stringify(list));
 
-function toGoogleDate(iso){
-  const d = new Date(iso);
-  const pad = n => String(n).padStart(2,'0');
-  return (
-    d.getUTCFullYear().toString() +
-    pad(d.getUTCMonth()+1) +
-    pad(d.getUTCDate()) + 'T' +
-    pad(d.getUTCHours()) +
-    pad(d.getUTCMinutes()) +
-    pad(d.getUTCSeconds()) + 'Z'
-  );
+const keyOf = (ev) => `${ev.title}__${ev.startISO}`;
+
+/* Clash with ANY saved event (excluding self) */
+function clashesWithOthers(eventObj, savedList){
+  const s = new Date(eventObj.startISO).getTime();
+  const e = new Date(eventObj.endISO).getTime();
+  return savedList.some(m => {
+    if (keyOf(m) === keyOf(eventObj)) return false;
+    const S = new Date(m.startISO).getTime(), E = new Date(m.endISO).getTime();
+    return Math.max(s, S) < Math.min(e, E);
+  });
 }
-function buildGoogleCalUrl({title, startISO, endISO, location, details=""}){
-  const dates = `${toGoogleDate(startISO)}/${toGoogleDate(endISO)}`;
+
+/* =========================
+   Google Calendar link (no auth)
+   ========================= */
+function toUTCBasic(iso){
+  const d = new Date(iso), pad = n => String(n).padStart(2,'0');
+  return `${d.getUTCFullYear()}${pad(d.getUTCMonth()+1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
+}
+function googleCalUrl({title, startISO, endISO, location, details=""}){
   const u = new URL('https://calendar.google.com/calendar/render');
   u.searchParams.set('action','TEMPLATE');
   u.searchParams.set('text', title);
-  u.searchParams.set('dates', dates);
+  u.searchParams.set('dates', `${toUTCBasic(startISO)}/${toUTCBasic(endISO)}`);
   if (location) u.searchParams.set('location', location);
   if (details)  u.searchParams.set('details', details);
   return u.toString();
 }
 
+/* =========================
+   UI templates & rendering
+   ========================= */
+function cardTemplate(e, accentClass, isSaved, hasClashAgainstOthers){
+  // Show red badge only when NOT saved and there is a clash with others
+  const showClash = !isSaved && hasClashAgainstOthers;
+
+  // Disable actions on clash; Saved state always disabled
+  const addDisabled  = showClash ? 'disabled aria-disabled="true" tabindex="-1"' : '';
+  const saveDisabled = (isSaved || showClash) ? 'disabled aria-disabled="true"' : '';
+
+  const addBtnClasses  = `btn ${showClash ? 'btn-danger' : 'btn-primary'} btn-sm ${showClash ? 'disabled' : ''}`;
+  const saveBtnClasses = `btn ${isSaved ? 'btn-success' : (showClash ? 'btn-outline-secondary' : 'btn-outline-primary')} btn-sm`;
+
+  return `
+<div class="event-card ${accentClass}">
+  <img class="event-thumb" src="${e.img}" alt="${e.title}">
+  <div class="event-body">
+    <div class="d-flex justify-content-between align-items-start">
+      <h5 class="event-title mb-1">${e.title}</h5>
+      ${showClash ? `<span class="badge text-bg-danger">Clashes with My Events</span>` : ``}
+    </div>
+    <ul class="meta-list">
+      <li><i class="bi bi-calendar2-event"></i>${e.dateText}</li>
+      <li><i class="bi bi-clock"></i>${e.timeText}</li>
+      <li><i class="bi bi-geo-alt"></i>${e.locText}</li>
+    </ul>
+    <div class="event-actions d-flex gap-2 flex-wrap">
+      <a class="${addBtnClasses}"
+         href="#"
+         ${addDisabled}
+         data-add-to-gcal
+         data-title="${e.title}"
+         data-location="${e.locText}"
+         data-start="${e.startISO}"
+         data-end="${e.endISO}">
+         <i class="bi bi-calendar-plus me-1"></i>Add to Google
+      </a>
+      <a class="btn btn-outline-secondary btn-sm" href="#">Details</a>
+      <button class="${saveBtnClasses}"
+         type="button"
+         ${saveDisabled}
+         data-save-local
+         data-title="${e.title}"
+         data-location="${e.locText}"
+         data-start="${e.startISO}"
+         data-end="${e.endISO}"
+         data-img="${e.img}"
+         data-categories='${JSON.stringify(e.categories)}'>
+         ${isSaved ? 'Saved' : 'Save to My Events'}
+      </button>
+    </div>
+  </div>
+</div>`;
+}
+
+function renderCarousel(list){
+  const inner = document.getElementById('carouselInner');
+  const dots  = document.getElementById('carouselDots');
+  if (!inner || !dots) return;
+
+  inner.innerHTML = ''; dots.innerHTML = '';
+  const saved = loadMyEvents();
+
+  for (let i = 0; i < list.length; i += 4) {
+    const chunk = list.slice(i, i + 4);
+
+    const cols = chunk.map(ev => {
+      const accent = (current !== 'all') ? ACCENT[current] : ACCENT[ev.categories[0]];
+      const isSaved = saved.some(m => keyOf(m) === keyOf(ev));
+      const hasClashAgainstOthers = clashesWithOthers(ev, saved);
+      return `<div class="col-12 col-sm-6 col-lg-3">${cardTemplate(ev, accent, isSaved, hasClashAgainstOthers)}</div>`;
+    }).join('');
+
+    inner.innerHTML += `
+      <div class="carousel-item${i === 0 ? ' active' : ''}">
+        <div class="row g-3">${cols}</div>
+      </div>`;
+    dots.innerHTML += `
+      <button type="button" data-bs-target="#eventsCarousel"
+              data-bs-slide-to="${i/4}"
+              class="${i===0?'active':''}"
+              aria-label="Slide ${i/4+1}"></button>`;
+  }
+}
+
+/* =========================
+   Filtering + Carousel init
+   ========================= */
+let current = 'all';
+function applyFilter(){
+  const filtered = current === 'all' ? events : events.filter(e => e.categories.includes(current));
+  renderCarousel(filtered);
+
+  const el = document.getElementById('eventsCarousel');
+  if (el) bootstrap.Carousel.getOrCreateInstance(el).to(0);
+}
+
+document.getElementById('filters')?.addEventListener('click', (e) => {
+  const chip = e.target.closest('.chip'); if (!chip) return;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  current = chip.dataset.filter;
+  applyFilter();
+});
+
+/* =========================
+   Click handlers
+   ========================= */
 document.addEventListener('click', (e) => {
+  // ignore clicks on disabled controls
+  if (e.target.closest('.disabled,[disabled],[aria-disabled="true"]')) {
+    e.preventDefault();
+    return;
+  }
+
+  // Add to Google
   const gbtn = e.target.closest('[data-add-to-gcal]');
   if (gbtn) {
     e.preventDefault();
-    const url = buildGoogleCalUrl({
+    const payload = {
       title: gbtn.dataset.title,
       startISO: gbtn.dataset.start,
       endISO: gbtn.dataset.end,
       location: gbtn.dataset.location
-    });
-    window.open(url, '_blank', 'noopener');
+    };
+    // Safety net: block if clash (should already be disabled by render)
+    if (clashesWithOthers(payload, loadMyEvents())) return;
+    window.open(googleCalUrl(payload), '_blank', 'noopener');
     return;
   }
-  // ICS download
-  const ibtn = e.target.closest('[data-download-ics]');
-  if (ibtn) {
-    e.preventDefault();
-    const ics = buildICS({
-      title: ibtn.dataset.title,
-      startISO: ibtn.dataset.start,
-      endISO: ibtn.dataset.end,
-      location: ibtn.dataset.location
-    });
-    const safe = ibtn.dataset.title.replace(/[^\w\-]+/g,'_');
-    downloadICS(`${safe}.ics`, ics);
+
+  // Save to My Events
+  const sbtn = e.target.closest('[data-save-local]');
+  if (sbtn) {
+    const item = {
+      title: sbtn.dataset.title,
+      startISO: sbtn.dataset.start,
+      endISO: sbtn.dataset.end,
+      location: sbtn.dataset.location,
+      img: sbtn.dataset.img || '',
+      categories: JSON.parse(sbtn.dataset.categories || '[]')
+    };
+    const mine = loadMyEvents();
+    // Block saving if it clashes with others
+    if (clashesWithOthers(item, mine)) return;
+    if (!mine.some(m => keyOf(m) === keyOf(item))) {
+      mine.push(item);
+      saveMyEvents(mine);
+    }
+    // Re-render to refresh states
+    applyFilter();
   }
 });
 
-
+/* Initial render */
 applyFilter();
+
+}); // DOMContentLoaded
 </script>
 </body>
 </html>
