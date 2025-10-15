@@ -49,6 +49,19 @@ body{ background:#f6f7fb; }
     .chip.accent-mint.active { background: #38d39f; color: #fff; }
     .chip.accent-lav.active { background: #8b8bff; color: #fff; }
 
+    #navbarid{
+      background-color: rgb(194, 222, 255);
+      border-width: 2px;
+      border-color: #041373;
+      margin-bottom: 40px;
+      font-family:Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    #navitems{
+      padding-left: 10px;
+      display:flex; align-items:center; justify-content:center;
+    }
+
     #eventsCarousel{
       margin: 20px;
     }
