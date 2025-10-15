@@ -1,0 +1,39 @@
+body{ background:#f6f7fb; }
+    .section-header{ display:flex; align-items:center; justify-content:center; margin-bottom:.75rem; }
+
+    .filters{ display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; margin-bottom:.5rem; }
+    .chip{ border:1px solid #e3e6ef; background:#fff; color:#394150;
+      padding:.35rem .75rem; border-radius:999px; font-weight:600; font-size:.9rem;
+      cursor:pointer; user-select:none; }
+    .chip.active{ background:#586ae2; color:#fff; border-color:#586ae2; }
+
+    .event-card{ background:#fff; border:1px solid #ececf4; border-radius:14px;
+      overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.06);
+      transition:.18s ease; height:100%; }
+    .event-card:hover{ transform:translateY(-3px); box-shadow:0 10px 24px rgba(0,0,0,.1); }
+
+    .accent-pink{ border-top:4px solid #ff7ab6; }
+    .accent-sky{ border-top:4px solid #5cc6ff; }
+    .accent-mint{ border-top:4px solid #38d39f; }
+    .accent-lav{ border-top:4px solid #8b8bff; }
+
+    .event-thumb{ width:100%; height:150px; object-fit:cover; border-bottom:1px solid #eee; }
+    .event-body{ padding:14px 16px; }
+    .event-title{ font-weight:700; font-size:1.06rem; margin:0 0 6px; color:#121926; }
+
+    .meta-list{ list-style:none; padding:0; margin:0 0 12px; }
+    .meta-list li{ display:flex; gap:.55rem; color:#5f6b7a; font-size:.92rem; line-height:1.3; padding:.15rem 0; }
+    .meta-list i{ color:#6e7bff; font-size:1rem; margin-top:.15rem; }
+
+    .carousel-item .row > [class*="col"]{ display:flex; }
+
+    .carousel-control-prev, .carousel-control-next{
+      width:3rem; height:3rem; top:50%; transform:translateY(-50%);
+      background:#ffffff; border:1px solid #e8e8f2; border-radius:50%; opacity:.95;
+    }
+    .carousel-control-prev .bi, .carousel-control-next .bi{ font-size:1.25rem; color:#111; }
+    .carousel-control-prev:hover, .carousel-control-next:hover{ opacity:1; }
+
+    .carousel-indicators{ position:static; margin-top:12px; justify-content:center; }
+    .carousel-indicators [data-bs-target]{ width:12px; height:12px; border-radius:50%; background:#c8cfe0; border:none; }
+    .carousel-indicators .active{ background:#586ae2; }
