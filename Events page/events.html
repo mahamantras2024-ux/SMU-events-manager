@@ -19,11 +19,11 @@
 
   <div class="filters" id="filters">
     <span class="chip active" data-filter="all">All</span>
-    <span class="chip" data-filter="tech">Tech</span>
-    <span class="chip" data-filter="arts">Arts</span>
-    <span class="chip" data-filter="sports">Sports</span>
-    <span class="chip" data-filter="career">Career</span>
-    <span class="chip" data-filter="community">Community</span>
+    <span class="chip accent-sky" data-filter="tech">Tech</span>
+    <span class="chip accent-pink" data-filter="arts">Arts</span>
+    <span class="chip accent-mint" data-filter="sports">Sports</span>
+    <span class="chip accent-lav" data-filter="career">Career</span>
+    <span class="chip accent-mint" data-filter="community">Community</span>
   </div>
 
   <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6500">
@@ -44,14 +44,14 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const events=[
-  {title:"HackSMU: 24-Hour Hackathon",dateText:"Fri, 5 Dec 2025",timeText:"7:00 PM → Sat, 7:00 PM",locText:"SIS Building",img:"hackathon.png",categories:["tech"],accent:"accent-sky"},
-  {title:"Open Mic & Poetry Slam",dateText:"Fri, 12 Dec 2025",timeText:"8:00–10:30 PM",locText:"Concourse Hall",img:"mic.jpeg",categories:["arts","community"],accent:"accent-pink"},
-  {title:"Finance Forum: Markets 2025",dateText:"Wed, 10 Dec 2025",timeText:"5:30–7:30 PM",locText:"Shaw Alumni House",img:"finance.png",categories:["career"],accent:"accent-lav"},
-  {title:"Skatathon 2025",dateText:"Fri, 19 Dec 2025",timeText:"7:00–9:00 PM",locText:"Fort Canning Park",img:"skate.jpeg",categories:["sports","community"],accent:"accent-mint"},
-  {title:"Art Jamming & Chill",dateText:"Sat, 22 Nov 2025",timeText:"2:00–5:00 PM",locText:"Tanjong Hall",img:"art.jpg",categories:["arts"],accent:"accent-pink"},
-  {title:"AI & Robotics Demo Day",dateText:"Sat, 6 Dec 2025",timeText:"10:00 AM–1:00 PM",locText:"SMU Labs",img:"robotics.webp",categories:["tech"],accent:"accent-sky"},
-  {title:"Eco-Smart Upcycling Workshop",dateText:"Sat, 13 Dec 2025",timeText:"3:00–6:00 PM",locText:"T3 Lobby",img:"upcycling.jpg",categories:["community"],accent:"accent-mint"},
-  {title:"Career Coffee Chats",dateText:"Thu, 4 Dec 2025",timeText:"4:00–6:00 PM",locText:"LKCSB Atrium",img:"chat.webp",categories:["career"],accent:"accent-lav"}
+  {title:"HackSMU: 24-Hour Hackathon",dateText:"Fri, 5 Dec 2025",timeText:"7:00 PM → Sat, 7:00 PM",locText:"SIS Building",img:"hackathon.png",categories:["tech"]},
+  {title:"Open Mic & Poetry Slam",dateText:"Fri, 12 Dec 2025",timeText:"8:00–10:30 PM",locText:"Concourse Hall",img:"mic.jpeg",categories:["arts","community"]},
+  {title:"Finance Forum: Markets 2025",dateText:"Wed, 10 Dec 2025",timeText:"5:30–7:30 PM",locText:"Shaw Alumni House",img:"finance.png",categories:["career"],},
+  {title:"Skatathon 2025",dateText:"Fri, 19 Dec 2025",timeText:"7:00–9:00 PM",locText:"Fort Canning Park",img:"skate.jpeg",categories:["sports","community"],},
+  {title:"Art Jamming & Chill",dateText:"Sat, 22 Nov 2025",timeText:"2:00–5:00 PM",locText:"Tanjong Hall",img:"art.jpg",categories:["arts"]},
+  {title:"AI & Robotics Demo Day",dateText:"Sat, 6 Dec 2025",timeText:"10:00 AM–1:00 PM",locText:"SMU Labs",img:"robotics.webp",categories:["tech"]},
+  {title:"Eco-Smart Upcycling Workshop",dateText:"Sat, 13 Dec 2025",timeText:"3:00–6:00 PM",locText:"T3 Lobby",img:"upcycling.jpg",categories:["community"]},
+  {title:"Career Coffee Chats",dateText:"Thu, 4 Dec 2025",timeText:"4:00–6:00 PM",locText:"LKCSB Atrium",img:"chat.webp",categories:["career"]}
 ];
 
 function cardTemplate(e){return`
