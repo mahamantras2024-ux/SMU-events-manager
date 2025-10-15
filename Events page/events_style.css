@@ -26,7 +26,7 @@ body{ background:#f6f7fb; }
 
      /* --- Chip accent colors --- */
     .chip.accent-grey {
-      border-color: #d9d9d9; color: #d9d9d9;
+      border-color: #616161; color: #616161;
     }
     .chip.accent-pink { border-color: #ff7ab6; color: #ff7ab6; }
     .chip.accent-sky { border-color: #5cc6ff; color: #5cc6ff; }
