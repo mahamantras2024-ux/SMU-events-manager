@@ -82,10 +82,6 @@ body{ background:#f6f7fb; }
       display:flex; align-items:center; justify-content:center;
     }
 
-    #logout{
-      padding: 100px;
-
-    }
 
     .ula { /* CSS rule for hover-underline-animation class */
       display: inline-block; /* Display property set to inline-block */
