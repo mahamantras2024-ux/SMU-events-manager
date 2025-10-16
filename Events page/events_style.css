@@ -19,6 +19,7 @@ body{ background:#f6f7fb; }
     .event-card{ background:#fff; border:1px solid #ececf4; border-radius:14px;
       overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.06);
       transition:.18s ease; height:100%; }
+
     .event-card:hover{ transform:translateY(-3px); box-shadow:0 10px 24px rgba(0,0,0,.1); }
 
     .tech{
@@ -130,3 +131,18 @@ body{ background:#f6f7fb; }
     .carousel-indicators{ position:static; margin-top:12px; justify-content:center; }
     .carousel-indicators [data-bs-target]{ width:12px; height:12px; border-radius:50%; background:#c8cfe0; border:none; }
     .carousel-indicators .active{ background:#586ae2; }
+
+    /* Stop the row from bleeding outside the slide (which gets clipped) */
+#eventsCarousel .carousel-item .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Make sure cards stretch nicely */
+#eventsCarousel .carousel-item .row > [class*="col-"] {
+  display: flex;
+}
+
+#eventsCarousel .event-card {
+  width: 100%;
+}
