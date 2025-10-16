@@ -63,7 +63,6 @@ body{ background:#f6f7fb; }
     #navbarid{
       background-color: #041373;
       border-width: 2px;
-      border-color: #041373;
       margin-bottom: 40px;
     }
 
@@ -83,27 +82,27 @@ body{ background:#f6f7fb; }
     }
 
 
-    .ula { /* CSS rule for hover-underline-animation class */
-      display: inline-block; /* Display property set to inline-block */
-      position: relative; /* Position property set to relative */
+    .ula { 
+      display: inline-block; 
+      position: relative;
     }
 
-    .ula:after { /* CSS rule for pseudo-element :after */
-      content: ''; /* Content property set to empty string */
-      position: absolute; /* Position property set to absolute */
-      width: 100%; /* Width set to 100% */
-      transform: scaleX(0); /* Initial transformation scaleX set to 0 */
-      height: 2px; /* Height set to 2px */
-      bottom: 0; /* Positioned at the bottom */
-      left: 0; /* Positioned at the left */
-      background-color: rgb(191, 156, 96); /* Background color set to #0087ca */
-      transform-origin: bottom right; /* Origin of transformation set to bottom right */
-      transition: transform 0.50s ease-out; /* Transition property for smooth animation */
+    .ula:after { 
+      content: ''; 
+      position: absolute; 
+      width: 100%; 
+      transform: scaleX(0); 
+      height: 2px; 
+      bottom: 0;
+      left: 0;
+      background-color: rgb(191, 156, 96);
+      transform-origin: bottom right;
+      transition: transform 0.50s ease-out;
     }
 
-    .ula:hover:after { /* CSS rule for hover state of :after pseudo-element */
-      transform: scaleX(1); /* Transformation scaleX set to 1 on hover */
-      transform-origin: bottom left; /* Origin of transformation set to bottom left on hover */
+    .ula:hover:after { 
+      transform: scaleX(1); 
+      transform-origin: bottom left;
     }
 
 
