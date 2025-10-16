@@ -52,7 +52,7 @@ body{ background:#f6f7fb; }
     .chip.accent-mint:hover { background: rgb(158, 192, 67); color: #fff; }
     .chip.accent-lav:hover { background: rgb(220, 111, 48); color: #fff; }
 
-    /* Active chip state — fills with colour */
+    /* Active chip state â€” fills with colour */
     .chip.accent-grey.active {
       background: #616161; color: #fff;
     }
@@ -111,7 +111,6 @@ body{ background:#f6f7fb; }
       margin: 20px;
     }
 
-    .event-thumb{ width:100%; height:150px; object-fit:cover; border-bottom:1px solid #eee; }
     .event-body{ padding:14px 16px; }
     .event-title{ font-weight:700; font-size:1.06rem; margin:0 0 6px; color:#121926; }
 
@@ -145,4 +144,103 @@ body{ background:#f6f7fb; }
 
 #eventsCarousel .event-card {
   width: 100%;
+}
+
+/* Keep this page from going billboard-wide */
+.my-events { max-width: 960px; }  /* try 960â€“1040 to taste */
+
+/* Exact layout to match your reference: 1 col on small, 2 cols on md+ */
+.events-grid {
+  display: grid;
+  gap: 1rem;                 /* card-to-card spacing */
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px) {  /* md breakpoint */
+  .events-grid { grid-template-columns: 1fr 1fr; }  /* always 2 columns */
+}
+
+/* Card hygiene â€“ no stretching, clean images */
+.event-card { height: auto; width: 100%; margin: 0; }
+.event-thumb { display: block; width: 100%; height: 160px; object-fit: cover; }
+
+/* Optional: if your earlier CSS set .event-card {height:100%}, override it */
+.event-card { height: auto !important; }
+
+/* one place in your CSS, after .event-card base rules */
+.event-card[class*="accent-"] { border-top: 4px solid transparent; }
+
+.event-card.accent-sky  { border-top-color: rgb(115, 185, 192); }
+.event-card.accent-pink { border-top-color: rgb(195, 110, 179); }
+.event-card.accent-mint { border-top-color: rgb(158, 192, 67); }
+.event-card.accent-lav  { border-top-color: rgb(220, 111, 48); }
+.event-card.accent-grey { border-top-color: #616161; }
+
+
+
+/* --- Card layout normalization --- */
+.event-card{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  border-radius:14px;
+  overflow:hidden;
+}
+
+.event-body{
+  display:flex;
+  flex-direction:column;
+  gap:.25rem;
+  flex:1;
+}
+.event-actions{ margin-top:auto; }
+
+.event-thumb{
+  display:block;
+  width:100%;
+  aspect-ratio: 16 / 9;
+  object-fit:cover;
+}
+
+.event-title {
+  display: -webkit-box;
+  display: box;             /* fallback for newer spec */
+  line-clamp: 2;            /* standard property */
+  -webkit-line-clamp: 2;    /* for Safari and old Chrome */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+.carousel-item .row > [class*="col"]{ display:flex; }
+#eventsCarousel .event-card{ width:100%; }
+
+.container.my-events{
+  max-width: 700px;
+  margin-inline:auto;
+  padding-inline:12px;
+}
+
+.meta-list{ margin:0 0 .5rem; }
+.meta-list li{ padding:.2rem 0; }
+
+.event-card[class*="accent-"]{ border-top:4px solid transparent; }
+.event-card.accent-sky  { border-top-color: rgb(115,185,192); }
+.event-card.accent-pink { border-top-color: rgb(195,110,179); }
+.event-card.accent-mint { border-top-color: rgb(158,192,67); }
+.event-card.accent-lav  { border-top-color: rgb(220,111,48); }
+.event-card.accent-grey { border-top-color:#616161; }
+
+.my-events { max-width: 1300px; margin: 0 auto; }
+#myEventsContainer .col {
+  flex: 1 1 295px;
+  max-width: 295px;
+}
+.event-thumb {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+.event-card {
+  height: auto !important;
 }
