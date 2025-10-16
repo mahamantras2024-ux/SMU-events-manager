@@ -91,12 +91,24 @@
         <label for="pwd" class="form-label">Password</label>
         <input type="password" class="form-control" id="pwd" placeholder="Enter your password">
       </div>
-      <button type="submit" class="btn btn-primary" onclick="location.href = 'events.html'">Login</button>
+      <button type="submit" class="btn btn-primary" onclick=redirect()>Login</button>
       <div class="footer-text">
         Don’t have an account? <a href="#">Register here</a>
       </div>
     </form>
   </div>
+
+  <script>
+    function redirect() {
+      let role = document.getElementById("email").innerText;
+      if (role=='admin') {
+        location.href = 'my_events_admin.html';
+      } else {
+        location.href = 'events.html';
+      }
+    }
+    
+  </script>
 </body>
 
 </html>
