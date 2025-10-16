@@ -100,11 +100,11 @@
 
   <script>
     function redirect() {
-      let role = document.getElementById("email").innerText;
-      if (role=='admin') {
-        location.href = 'my_events_admin.html';
+      let role = document.getElementById("email").value;
+      if (role.trim() == "admin") {
+        location.href = "my_events_admin.html";
       } else {
-        location.href = 'events.html';
+        location.href = "events.html";
       }
     }
     
