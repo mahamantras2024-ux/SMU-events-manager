@@ -108,16 +108,6 @@ function cardTemplate(e, isSaved, hasClashAgainstOthers){
       <li><i class="bi bi-geo-alt"></i>${e.locText}</li>
     </ul>
     <div class="event-actions d-flex gap-2 flex-wrap">
-      <a class="${addBtnClasses}"
-         href="#"
-         ${addDisabled}
-         data-add-to-gcal
-         data-title="${e.title}"
-         data-location="${e.locText}"
-         data-start="${e.startISO}"
-         data-end="${e.endISO}">
-         <i class="bi bi-calendar-plus me-1"></i>Add to Google
-      </a>
       <a class="btn btn-outline-secondary btn-sm" href="#">Details</a>
       <button class="${saveBtnClasses}"
          type="button"
