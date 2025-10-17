@@ -55,28 +55,33 @@ function formatRange(startISO, endISO){
 }
 
 function card(e){
-  const accent = ACCENT[(e.categories && e.categories[0]) || 'tech'] || 'accent-sky';
   const {dateText, timeText} = formatRange(e.startISO, e.endISO);
   const img = e.img || 'placeholder.jpg';
   return `
-    <div class="col">
-      <div class="event-card ${accent}">
-        <img class="event-thumb" src="${img}" alt="${e.title}">
-        <div class="event-body">
-          <h5 class="event-title">${e.title}</h5>
-          <ul class="meta-list">
-            <li><i class="bi bi-calendar2-event"></i>${dateText}</li>
-            <li><i class="bi bi-clock"></i>${timeText}</li>
-            <li><i class="bi bi-geo-alt"></i>${e.location || ''}</li>
-          </ul>
-          <div class="event-actions d-flex gap-2 flex-wrap">
-            <a class="btn btn-outline-secondary btn-sm" href="#">Details</a>
-            <span class="btn btn-success btn-sm disabled">Saved</span>
-          </div>
+  <div class="col">
+    <div class="event-card">
+      <img class="event-thumb" src="${img}" alt="${e.title}">
+      <div class="event-body">
+        <h5 class="event-title">${e.title}</h5>
+        <ul class="meta-list">
+          <li><i class="bi bi-calendar2-event"></i>${dateText}</li>
+          <li><i class="bi bi-clock"></i>${timeText}</li>
+          <li><i class="bi bi-geo-alt"></i>${e.location || ''}</li>
+        </ul>
+        <div class="event-actions d-flex gap-2 flex-wrap">
+          <a class="btn btn-primary btn-sm" href="${googleCalUrl(e)}" target="_blank" rel="noopener">
+            <i class="bi bi-calendar-plus me-1"></i>Add to Google
+          </a>
+          <button class="btn btn-outline-danger btn-sm" data-remove="${e.title}|${e.startISO}">
+            <i class="bi bi-x-circle me-1"></i>Remove
+          </button>
         </div>
       </div>
-    </div>`;
+    </div>
+  </div>`;
 }
+
+
 
 function render(){
   const list = loadMyEvents();
