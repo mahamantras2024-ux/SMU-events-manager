@@ -1,3 +1,31 @@
+<?php
+require_once('db_connect.php');
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $pass = $_POST['password'];
+    $confirmpass = $_POST['confirmPassword'];
+    $role = $_POST['regrole'];
+    if ($pass == $confirmpass) {
+          $password = password_hash($pass, PASSWORD_DEFAULT); // hash password
+    } else {
+      die;
+    }
+    $stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $username, $password, $role);
+
+    if ($stmt->execute()) {
+        echo "Account created! <a href='login.php'>Login here</a>";
+    } else {
+        echo "Error: Username may already exist.";
+    }
+}
+?>
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -162,6 +190,7 @@
         <h1 id="regTitle" class="brand">Welcome!</h1>
 
         <!-- Role -->
+        <form method="POST">
         <div class="segment" role="radiogroup" aria-label="Register as">
           <input type="radio" id="reg-user" name="regrole" value="user" checked>
           <label for="reg-user"><i class="bi bi-person"></i> User</label>
@@ -171,12 +200,13 @@
 
           <span class="slider" aria-hidden="true"></span>
         </div>
+        </form>
 
-        <form id="regForm" novalidate>
+        <form id="regForm" method="POST" novalidate>
           <div class="row g-3">
             <div class="col-md-6 field">
               <label class="form-label" for="username">Username</label>
-              <input id="username" class="form-control"
+              <input id="username" name="username" class="form-control"
                      title="3–24 characters; letters, numbers, dot or underscore"
                      minlength="3" maxlength="24" pattern="^[a-zA-Z0-9_\.]+$">
               <div class="tick" id="usernameTick">✓</div>
@@ -191,7 +221,7 @@
 
             <div class="col-md-6 field">
               <label class="form-label" for="password">Password</label>
-              <input id="password" class="form-control" type="password"
+              <input id="password" name="password" class="form-control" type="password"
                      title="Use 10+ chars with upper/lowercase, a number, a symbol, and no spaces"
                      autocomplete="new-password">
               <div class="tick" id="pwTick">✓</div>
@@ -209,7 +239,7 @@
 
             <div class="col-md-6 field">
               <label class="form-label" for="confirmPassword">Confirm password</label>
-              <input id="confirmPassword" class="form-control" type="password"
+              <input id="confirmPassword" name="confirmPassword" class="form-control" type="password"
                      title="Re-enter the same password" autocomplete="new-password">
               <div class="tick" id="cpwTick">✓</div>
             </div>
@@ -245,7 +275,7 @@
             </div>
           </div>
 
-          <button class="btn btn-cta mt-3" type="button">Create Account</button>
+          <button class="btn btn-cta mt-3" type="submit">Create Account</button>
 
           <div class="my-3 divider">Or continue with</div>
           <button type="button" class="btn btn-google" title="Sign up with Google">
