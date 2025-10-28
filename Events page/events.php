@@ -149,7 +149,7 @@ function formatDate(startISO) {
   const optsTime = { hour:'2-digit', minute:'2-digit' };
 
   let s = new Date(startISO);
-  let dateText = s.toLocaleDateString(undefined, optsDate);;
+  let dateText = s.toLocaleDateString(undefined, optsDate);
   return dateText;
 }
 /* =========================
@@ -185,10 +185,10 @@ function cardTemplate(e, isSaved, hasClashAgainstOthers){
          ${saveDisabled}
          data-save-local
          data-title="${e.title}"
-         data-location="${e.locText}"
+         data-location="${e.location}"
          data-start="${e.startISO}"
          data-end="${e.endISO}"
-         data-img="${e.img}"
+         data-img="${e.picture}"
          data-categories='${JSON.stringify(e.category)}'>
          ${isSaved ? 'Saved' : 'Save to My Events'}
       </button>
