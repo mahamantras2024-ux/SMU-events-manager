@@ -4,7 +4,7 @@ class ConnectionManager {
         $servername = 'localhost';
         $username = 'root';
         $password = '';
-        $dbname = 'omni_db';
+        $dbname = 'omni';
         $port = '3306';
 
         try {

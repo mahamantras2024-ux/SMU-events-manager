@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pass = $_POST['password'];
     $confirmpass = $_POST['confirmPassword'];
     $role = $_POST['regrole'];
+    $email = $_POST["email"];
 
     // Initialize error array
     $errors = [];
@@ -15,6 +16,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // username empty?
     if (empty($username)) {
         $errors[] = "Username is required.";
+    }
+    // email empty?
+    if (empty($email)) {
+        $errors[] = "email is required.";
     }
     // Password empty?
     if (empty($pass)) {
@@ -47,17 +52,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = password_hash($pass, PASSWORD_DEFAULT);
 
     // Insert user
-    $stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (:username, :password, :role)");
+    $stmt = $conn->prepare("INSERT INTO users (username, password, role, email) VALUES (:username, :password, :role, :email)");
     $stmt->bindValue(':username', $username);
     $stmt->bindValue(':password', $password);
     $stmt->bindValue(':role', $role);
+    $stmt->bindValue(':email', $email);
 
     if ($stmt->execute()) {
         echo "<script>
         alert('Account created successfully!');
-        window.location.href = 'login.html';
+        window.location.href = 'Login.php';
         </script>";
-      exit;
+       exit;
     } else {
         echo "Error: Username may already exist. <a href='register.php'>Try again</a>";
     }
@@ -74,7 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta charset="UTF-8" />
   <title>Omni • Register</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <!-- Bootstrap + Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -254,7 +259,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="col-md-6 field">
               <label class="form-label" for="email">Email</label>
-              <input id="email" class="form-control" type="email"
+              <input id="email" class="form-control" type="email" name="email"
                 title="Use a valid email (must include '@' and a domain, e.g. name@example.com)"
                 pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" required>
             </div>

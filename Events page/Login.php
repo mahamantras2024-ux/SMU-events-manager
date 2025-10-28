@@ -1,3 +1,78 @@
+<?php
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    require_once('db_connect.php');
+    $manager = new ConnectionManager();
+    $conn = $manager->connect();
+
+    // Get and sanitize input
+    $usernameOrEmail = trim($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $role = $_POST['loginrole'] ?? '';
+
+    // Basic validation
+    if (empty($usernameOrEmail) || empty($password) || empty($role)) {
+        echo "<script>
+                alert('Please ensure all fields are filled.');
+                window.location.href = 'login.php';
+              </script>";
+        exit;
+    }
+
+    // Check if user exists
+    $stmt = $conn->prepare("SELECT * FROM users WHERE (username = :input OR email = :input) AND role = :role");
+    $stmt->bindValue(':input', $usernameOrEmail);
+    $stmt->bindValue(':role', $role);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user) {
+        if (password_verify($password, $user['password'])) {
+            // ✅ Correct credentials
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
+
+            if ($role == 'user') {
+            echo "<script>
+                    alert('Login successful! Welcome, {$user['username']}');
+                    window.location.href = 'events.php';
+                  </script>";
+            exit;
+            } else {
+              echo "<script>
+                    alert('Login successful! Welcome, {$user['username']}');
+                    window.location.href = 'manage_events_admin.html';
+                  </script>";
+              exit;
+            }
+        } else {
+            // ❌ Wrong password
+            echo "<script>
+                    alert('Incorrect password. Please try again.');
+                    window.location.href = 'login.php';
+                  </script>";
+            exit;
+        }
+    } else {
+        // ❌ No user with that username/email + role
+        echo "<script>
+                alert('No account found with that username/email and role.');
+                window.location.href = 'login.php';
+              </script>";
+        exit;
+    }
+}
+?>
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -129,6 +204,7 @@
       <div class="form-narrow">
         <h1 id="loginTitle" class="brand">Hello Again!</h1>
 
+        <form method="POST" action="Login.php" novalidate>
         <div class="segment" role="radiogroup" aria-label="Login as">
           <input type="radio" id="login-user" name="loginrole" value="user" checked>
           <label for="login-user"><i class="bi bi-person"></i> User</label>
@@ -142,15 +218,16 @@
         <div class="row g-3">
           <div class="col-12">
             <label class="form-label" for="loginEmail">Username/Email</label>
-            <input id="loginEmail" type="email" class="form-control" title="Enter the email for your account.">
+            <input id="loginEmail" name="username" type="email" class="form-control" title="Enter the email for your account.">
           </div>
           <div class="col-12">
             <label class="form-label" for="loginPwd">Password</label>
-            <input id="loginPwd" type="password" class="form-control" title="Enter your password.">
+            <input id="loginPwd" type="password" name="password" class="form-control" title="Enter your password.">
           </div>
         </div>
 
-        <button class="btn btn-cta my-3">Login</button>
+        <button class="btn btn-cta my-3" type="submit">Login</button>
+        </form>
 
         <div class="my-3 divider">Or continue with</div>
         <button type="button" class="btn btn-google" title="Continue with Google">
