@@ -1,3 +1,11 @@
+<?php
+spl_autoload_register(
+  function ($class) {
+    require_once "model/$class.php";
+  }
+);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,21 +63,45 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<?php
+  $dao = new EventCollectionDAO();
+  $events_obj = $dao->getEvents();
+
+  $events_arr = array_map(function ($event) {
+    return [
+      'title' => $event->getTitle(),
+      'category' => $event->getCategory(),
+      'date' => $event->getDate(),
+      'start_time' => $event->getStartTime(),
+      'end_time' => $event->getEndTime(),
+      'location' => $event->getLocation(),
+      'picture' => $event->getPicture(),
+      'startISO' => $event->getStartISO(),
+      'endISO' => $event->getEndISO(),
+    ];
+  }, $events_obj);
+
+  $events_json = json_encode($events_arr);
+
+?>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 /* =========================
    DATA (with ISO datetimes)
    ========================= */
-const events = [
-  {title:"HackSMU: 24-Hour Hackathon",dateText:"Fri, 5 Dec 2025",timeText:"7:00 PM → Sat, 7:00 PM",locText:"SIS Building",img:"hackathon.png",categories:["tech"],startISO:"2025-12-05T19:00:00+08:00",endISO:"2025-12-06T19:00:00+08:00"},
-  {title:"Open Mic & Poetry Slam",dateText:"Fri, 12 Dec 2025",timeText:"8:00–10:30 PM",locText:"Concourse Hall",img:"mic.jpeg",categories:["arts"],startISO:"2025-12-12T20:00:00+08:00",endISO:"2025-12-12T22:30:00+08:00"},
-  {title:"Finance Forum: Markets 2025",dateText:"Wed, 10 Dec 2025",timeText:"5:30–7:30 PM",locText:"Shaw Alumni House",img:"finance.png",categories:["career"],startISO:"2025-12-10T17:30:00+08:00",endISO:"2025-12-10T19:30:00+08:00"},
-  {title:"Skatathon 2025",dateText:"Fri, 19 Dec 2025",timeText:"7:00–9:00 PM",locText:"Fort Canning Park",img:"skate.jpeg",categories:["sports"],startISO:"2025-12-19T19:00:00+08:00",endISO:"2025-12-19T21:00:00+08:00"},
-  {title:"Art Jamming & Chill",dateText:"Sat, 22 Nov 2025",timeText:"2:00–5:00 PM",locText:"Tanjong Hall",img:"art.jpg",categories:["arts"],startISO:"2025-11-22T14:00:00+08:00",endISO:"2025-11-22T17:00:00+08:00"},
-  {title:"AI & Robotics Demo Day",dateText:"Sat, 6 Dec 2025",timeText:"10:00 AM–1:00 PM",locText:"SMU Labs",img:"robotics.webp",categories:["tech"],startISO:"2025-12-06T10:00:00+08:00",endISO:"2025-12-06T13:00:00+08:00"},
-  {title:"Eco-Smart Upcycling Workshop",dateText:"Sat, 13 Dec 2025",timeText:"3:00–6:00 PM",locText:"T3 Lobby",img:"upcycling.jpg",categories:["arts"],startISO:"2025-12-13T15:00:00+08:00",endISO:"2025-12-13T18:00:00+08:00"},
-  {title:"Career Coffee Chats",dateText:"Thu, 4 Dec 2025",timeText:"4:00–6:00 PM",locText:"LKCSB Atrium",img:"chat.webp",categories:["career"],startISO:"2025-12-04T16:00:00+08:00",endISO:"2025-12-04T18:00:00+08:00"}
-];
+// const events = [
+//   {title:"HackSMU: 24-Hour Hackathon",dateText:"Fri, 5 Dec 2025",timeText:"7:00 PM → Sat, 7:00 PM",locText:"SIS Building",img:"hackathon.png",categories:["tech"],startISO:"2025-12-05T19:00:00+08:00",endISO:"2025-12-06T19:00:00+08:00"},
+//   {title:"Open Mic & Poetry Slam",dateText:"Fri, 12 Dec 2025",timeText:"8:00–10:30 PM",locText:"Concourse Hall",img:"mic.jpeg",categories:["arts"],startISO:"2025-12-12T20:00:00+08:00",endISO:"2025-12-12T22:30:00+08:00"},
+//   {title:"Finance Forum: Markets 2025",dateText:"Wed, 10 Dec 2025",timeText:"5:30–7:30 PM",locText:"Shaw Alumni House",img:"finance.png",categories:["career"],startISO:"2025-12-10T17:30:00+08:00",endISO:"2025-12-10T19:30:00+08:00"},
+//   {title:"Skatathon 2025",dateText:"Fri, 19 Dec 2025",timeText:"7:00–9:00 PM",locText:"Fort Canning Park",img:"skate.jpeg",categories:["sports"],startISO:"2025-12-19T19:00:00+08:00",endISO:"2025-12-19T21:00:00+08:00"},
+//   {title:"Art Jamming & Chill",dateText:"Sat, 22 Nov 2025",timeText:"2:00–5:00 PM",locText:"Tanjong Hall",img:"art.jpg",categories:["arts"],startISO:"2025-11-22T14:00:00+08:00",endISO:"2025-11-22T17:00:00+08:00"},
+//   {title:"AI & Robotics Demo Day",dateText:"Sat, 6 Dec 2025",timeText:"10:00 AM–1:00 PM",locText:"SMU Labs",img:"robotics.webp",categories:["tech"],startISO:"2025-12-06T10:00:00+08:00",endISO:"2025-12-06T13:00:00+08:00"},
+//   {title:"Eco-Smart Upcycling Workshop",dateText:"Sat, 13 Dec 2025",timeText:"3:00–6:00 PM",locText:"T3 Lobby",img:"upcycling.jpg",categories:["arts"],startISO:"2025-12-13T15:00:00+08:00",endISO:"2025-12-13T18:00:00+08:00"},
+//   {title:"Career Coffee Chats",dateText:"Thu, 4 Dec 2025",timeText:"4:00–6:00 PM",locText:"LKCSB Atrium",img:"chat.webp",categories:["career"],startISO:"2025-12-04T16:00:00+08:00",endISO:"2025-12-04T18:00:00+08:00"}
+// ];
+let events = <?= $events_json ?>;
+console.log(events);
 
 /* =========================
    Local “My Events” store
@@ -107,6 +139,19 @@ function googleCalUrl({title, startISO, endISO, location, details=""}){
   return u.toString();
 }
 
+function formatDate(startISO) {
+  const optsDate = {
+    weekday: 'short',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  };
+  const optsTime = { hour:'2-digit', minute:'2-digit' };
+
+  let s = new Date(startISO);
+  let dateText = s.toLocaleDateString(undefined, optsDate);;
+  return dateText;
+}
 /* =========================
    UI templates & rendering
    ========================= */
@@ -122,17 +167,17 @@ function cardTemplate(e, isSaved, hasClashAgainstOthers){
   const saveBtnClasses = `btn ${isSaved ? 'btn-success' : (showClash ? 'btn-outline-secondary' : 'btn-outline-primary')} btn-sm`;
 
   return `
-<div class="event-card ${categoryClass}">
-  <img class="event-thumb" src="${e.img}" alt="${e.title}">
+<div class="event-card ${e.category}">
+  <img class="event-thumb" src="${e.picture}" alt="${e.title}">
   <div class="event-body">
     <div class="d-flex justify-content-between align-items-start">
       <h5 class="event-title mb-1">${e.title}</h5>
       ${showClash ? `<span class="badge text-bg-danger">Clashes with My Events</span>` : ``}
     </div>
     <ul class="meta-list">
-      <li><i class="bi bi-calendar2-event"></i>${e.dateText}</li>
-      <li><i class="bi bi-clock"></i>${e.timeText}</li>
-      <li><i class="bi bi-geo-alt"></i>${e.locText}</li>
+      <li><i class="bi bi-calendar2-event"></i>${formatDate(e.startISO)}</li>
+      <li><i class="bi bi-clock"></i>${e.start_time} - ${e.end_time}</li>
+      <li><i class="bi bi-geo-alt"></i>${e.location}</li>
     </ul>
     <div class="event-actions d-flex gap-2 flex-wrap">
       <a class="btn btn-outline-secondary btn-sm" href="#">Details</a>
@@ -145,7 +190,7 @@ function cardTemplate(e, isSaved, hasClashAgainstOthers){
          data-start="${e.startISO}"
          data-end="${e.endISO}"
          data-img="${e.img}"
-         data-categories='${JSON.stringify(e.categories)}'>
+         data-categories='${JSON.stringify(e.category)}'>
          ${isSaved ? 'Saved' : 'Save to My Events'}
       </button>
     </div>
