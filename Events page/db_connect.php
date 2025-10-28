@@ -1,29 +1,24 @@
 <?php
-$servername = "localhost";
-$username = "root";       // your MySQL username
-$password = "";           // your MySQL password
-$dbname = "omni_db";
+class ConnectionManager {
+    public function connect() {
+        $servername = 'localhost';
+        $username = 'root';
+        $password = '';
+        $dbname = 'omni_db';
+        $port = '3306';
 
-// Connect to MySQL server (without selecting database yet)
-$conn = new mysqli($servername, $username, $password);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+        try {
+            $pdo = new PDO(
+                "mysql:host=$servername;dbname=$dbname;port=$port",
+                $username,
+                $password
+            );
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $pdo;
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+            return null;
+        }
+    }
 }
-
-// Create database if it doesn't exist
-$conn->query("CREATE DATABASE IF NOT EXISTS $dbname");
-
-// Select the database
-$conn->select_db($dbname);
-
-// Create users table if it doesn't exist
-$table_sql = "CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    role ENUM('user','admin') DEFAULT 'user',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)";
-
-$conn->query($table_sql);
 ?>

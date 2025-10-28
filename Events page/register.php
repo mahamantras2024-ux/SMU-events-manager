@@ -1,23 +1,65 @@
 <?php
 require_once('db_connect.php');
+$manager = new ConnectionManager();
+$conn = $manager->connect();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
+    $username = trim($_POST['username']);
     $pass = $_POST['password'];
     $confirmpass = $_POST['confirmPassword'];
     $role = $_POST['regrole'];
-    if ($pass == $confirmpass) {
-          $password = password_hash($pass, PASSWORD_DEFAULT); // hash password
-    } else {
-      die;
+
+    // Initialize error array
+    $errors = [];
+
+    // username empty?
+    if (empty($username)) {
+        $errors[] = "Username is required.";
     }
-    $stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $username, $password, $role);
+    // Password empty?
+    if (empty($pass)) {
+        $errors[] = "Password is required.";
+    }
+    // Passwords match?
+    if ($pass !== $confirmpass) {
+        $errors[] = "Passwords do not match";
+    }
+    // Username already exist?
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
+    $stmt->bindValue(':username', $username);
+    $stmt->execute();
+    $count = $stmt->fetchColumn();
+
+    if ($count > 0) {
+        $errors[] = "Username already exist";
+    }
+    if (!empty($errors)) {
+        // Display errors and link to register page
+        echo "<h3>Registration Errors:</h3><ul>";
+        foreach ($errors as $error) {
+            echo "<li>$error</li>";
+        }
+        echo "</ul><a href='register.php'>Go back to Register</a>";
+        exit; // stop execution if errors exist
+    }
+
+    // Hash password
+    $password = password_hash($pass, PASSWORD_DEFAULT);
+
+    // Insert user
+    $stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (:username, :password, :role)");
+    $stmt->bindValue(':username', $username);
+    $stmt->bindValue(':password', $password);
+    $stmt->bindValue(':role', $role);
 
     if ($stmt->execute()) {
-        echo "Account created! <a href='login.php'>Login here</a>";
+        echo "<script>
+        alert('Account created successfully!');
+        window.location.href = 'login.html';
+        </script>";
+      exit;
     } else {
-        echo "Error: Username may already exist.";
+        echo "Error: Username may already exist. <a href='register.php'>Try again</a>";
     }
 }
 ?>
@@ -190,7 +232,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h1 id="regTitle" class="brand">Welcome!</h1>
 
         <!-- Role -->
-        <form method="POST">
+        <form id="regForm" method="POST" novalidate>
         <div class="segment" role="radiogroup" aria-label="Register as">
           <input type="radio" id="reg-user" name="regrole" value="user" checked>
           <label for="reg-user"><i class="bi bi-person"></i> User</label>
@@ -200,9 +242,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
           <span class="slider" aria-hidden="true"></span>
         </div>
-        </form>
 
-        <form id="regForm" method="POST" novalidate>
           <div class="row g-3">
             <div class="col-md-6 field">
               <label class="form-label" for="username">Username</label>
