@@ -156,7 +156,6 @@ function formatDate(startISO) {
    UI templates & rendering
    ========================= */
 function cardTemplate(e, isSaved, hasClashAgainstOthers){
-  const categoryClass = (e.categories && e.categories[0]) ? e.categories[0] : '';
   const showClash = !isSaved && hasClashAgainstOthers;
 
   // Disable interactions on clash; Saved state always disabled
@@ -233,7 +232,7 @@ function renderCarousel(list){
    ========================= */
 let current = 'all';
 function applyFilter(){
-  const filtered = current === 'all' ? events : events.filter(e => e.categories.includes(current));
+  const filtered = current === 'all' ? events : events.filter(e => e.category.includes(current));
   renderCarousel(filtered);
   const el = document.getElementById('eventsCarousel');
   if (el) bootstrap.Carousel.getOrCreateInstance(el).to(0);
