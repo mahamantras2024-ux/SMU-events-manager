@@ -29,16 +29,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($user) {
         if (password_verify($password, $user['password'])) {
-            // ✅ Correct credentials
+            // Success case
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
 
+            // redirect for user
             if ($role == 'user') {
             echo "<script>
                     alert('Login successful! Welcome, {$user['username']}');
                     window.location.href = 'events.php';
                   </script>";
             exit;
+            // redirect for admin
             } else {
               echo "<script>
                     alert('Login successful! Welcome, {$user['username']}');
@@ -47,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
               exit;
             }
         } else {
-            // ❌ Wrong password
+            // wrong password
             echo "<script>
                     alert('Incorrect password. Please try again.');
                     window.location.href = 'login.php';
@@ -55,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit;
         }
     } else {
-        // ❌ No user with that username/email + role
+        // No user with role
         echo "<script>
                 alert('No account found with that username/email and role.');
                 window.location.href = 'login.php';
@@ -64,14 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
-
-
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -235,7 +229,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </button>
 
         <p class="mt-3 text-center text-muted">
-          Don’t have an account? <a class="link" href="register.html">Register</a>
+          Don’t have an account? <a class="link" href="register.php">Register</a>
         </p>
       </div>
     </div>

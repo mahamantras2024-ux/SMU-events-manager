@@ -4,11 +4,15 @@ $manager = new ConnectionManager();
 $conn = $manager->connect();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']);
-    $pass = $_POST['password'];
-    $confirmpass = $_POST['confirmPassword'];
+    $username = trim($_POST['username'] ?? "");
+    $pass = $_POST['password'] ?? "";
+    $confirmpass = $_POST['confirmPassword'] ?? "";
     $role = $_POST['regrole'];
-    $email = $_POST["email"];
+    $email = $_POST["email"] ?? "";
+    $year = $_POST["year"] ?? "";
+    $school = $_POST["school"] ?? "";
+    $major = $_POST["major"] ?? "";
+    $club = $_POST["club"] ?? "";
 
     // Initialize error array
     $errors = [];
@@ -28,6 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Passwords match?
     if ($pass !== $confirmpass) {
         $errors[] = "Passwords do not match";
+    }
+    // club for admin?
+    if ($role == "admin" && $club == "") {
+        $errors[] = "club not specified";
     }
     // Username already exist?
     $stmt = $conn->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
@@ -52,11 +60,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = password_hash($pass, PASSWORD_DEFAULT);
 
     // Insert user
-    $stmt = $conn->prepare("INSERT INTO users (username, password, role, email) VALUES (:username, :password, :role, :email)");
+    $stmt = $conn->prepare("INSERT INTO users (username, password, role, email, year, school, major, club) VALUES (:username, :password, :role, :email, :year, :school, :major, :club)");
     $stmt->bindValue(':username', $username);
     $stmt->bindValue(':password', $password);
     $stmt->bindValue(':role', $role);
     $stmt->bindValue(':email', $email);
+    $stmt->bindValue(':year', $year);
+    $stmt->bindValue(':school', $school);
+    $stmt->bindValue(':major', $major);
+    $stmt->bindValue(':club', $club);
 
     if ($stmt->execute()) {
         echo "<script>
@@ -291,14 +303,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="col-md-4">
               <label class="form-label" for="year">Year</label>
-              <select id="year" class="form-select" title="Your current year of study">
+              <select id="year" class="form-select" title="Your current year of study" name="year">
                 <option value="" selected disabled>Select</option>
                 <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
               </select>
             </div>
             <div class="col-md-4">
               <label class="form-label" for="school">School</label>
-              <select id="school" class="form-select" title="Choose your SMU school">
+              <select id="school" class="form-select" title="Choose your SMU school" name="school">
                 <option value="" selected disabled>Select</option>
                 <option>School of Accountancy</option>
                 <option>School of Business</option>
@@ -310,13 +322,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="col-md-4">
               <label class="form-label" for="major">Major</label>
-              <input id="major" class="form-control" title="Your primary major">
+              <input id="major" class="form-control" title="Your primary major" name="major">
             </div>
 
             <!-- Admin-only: Club officer -->
             <div id="adminFields" class="col-12 d-none">
               <label class="form-label" for="clubOffice">Club / Office (Club officer)</label>
-              <input id="clubOffice" class="form-control" title="Your club or administrative office">
+              <input id="clubOffice" class="form-control" title="Your club or administrative office" name="club">
             </div>
           </div>
 
