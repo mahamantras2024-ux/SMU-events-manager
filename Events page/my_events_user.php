@@ -1,3 +1,13 @@
+<?php
+session_start();
+var_dump($_SESSION);
+spl_autoload_register(
+  function ($class) {
+    require_once "model/$class.php";
+  }
+);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,10 +34,34 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<?php 
+  $dao = new EventCollectionDAO();
+
+  $currentUser = $dao->getUserId($_SESSION["username"]);
+  $user_events_obj = $dao->getUsersEvents($currentUser);
+
+  $user_events_arr = array_map(function ($events) {
+    return [
+      'title' => $events->getTitle(),
+      'category' => $events->getCategory(),
+      'date' => $events->getDate(),
+      'start_time' => $events->getStartTime(),
+      'end_time' => $events->getEndTime(),
+      'location' => $events->getLocation(),
+      'picture' => $events->getPicture(),
+      'startISO' => $events->getStartISO(),
+      'endISO' => $events->getEndISO(),
+    ];
+  }, $user_events_obj);
+
+  $user_events_json = json_encode($user_events_arr);
+?>
+
 <script>
 // Shared with events page
 const MY_EVENTS_KEY = 'smu_my_events_v1';
-const loadMyEvents = () => { try { return JSON.parse(localStorage.getItem(MY_EVENTS_KEY)) || [] } catch { return [] } };
+const loadMyEvents = <?= $user_events_json ?>;
 const saveMyEvents = (list) => localStorage.setItem(MY_EVENTS_KEY, JSON.stringify(list));
 
 // same category→accent map used on events page
@@ -55,12 +89,13 @@ function formatRange(startISO, endISO){
 }
 
 function card(e){
+  console.log(e);
   const {dateText, timeText} = formatRange(e.startISO, e.endISO);
-  const img = e.img || 'placeholder.jpg';
+  const picture = e.picture || 'placeholder.jpg';
   return `
   <div class="col">
     <div class="event-card">
-      <img class="event-thumb" src="${img}" alt="${e.title}">
+      <img class="event-thumb" src="${picture}" alt="${e.title}">
       <div class="event-body">
         <h5 class="event-title">${e.title}</h5>
         <ul class="meta-list">
@@ -84,7 +119,7 @@ function card(e){
 
 
 function render(){
-  const list = loadMyEvents();
+  const list = loadMyEvents;
   const cont = document.getElementById('myEventsContainer');
   const empty = document.getElementById('emptyState');
   if (!list.length) {
@@ -107,7 +142,7 @@ document.addEventListener('click', (e) => {
   const btn = e.target.closest('[data-remove]');
   if (!btn) return;
   const [title, startISO] = btn.dataset.remove.split('|');
-  const list = loadMyEvents().filter(ev => !(ev.title === title && ev.startISO === startISO));
+  const list = loadMyEvents.filter(ev => !(ev.title === title && ev.startISO === startISO));
   saveMyEvents(list);
   render();
 });
