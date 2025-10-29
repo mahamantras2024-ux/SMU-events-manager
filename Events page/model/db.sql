@@ -129,9 +129,14 @@ INSERT INTO events (title, category, date, start_time, end_time, location, pictu
 
 
 CREATE TABLE IF NOT EXISTS event_person (
-    event_id        integer NOT NULL,
-    person_id       integer NOT NULL,
-    PRIMARY KEY (event_id, person_id),
+    person_id           integer NOT NULL,
+    event_id            integer NOT NULL,
+    PRIMARY KEY (person_id, event_id),
     KEY person_id (person_id)       -- line needed for faster filtering for a person's events
 );
 
+-- hard coded saved events for testing
+INSERT INTO event_person VALUES
+(1, 2),
+(1, 6),
+(2, 3);

@@ -1,4 +1,5 @@
 <?php
+session_start();
 spl_autoload_register(
   function ($class) {
     require_once "model/$class.php";
@@ -66,8 +67,9 @@ spl_autoload_register(
 
 <?php
   $dao = new EventCollectionDAO();
-  $events_obj = $dao->getEvents();
 
+  // all events
+  $events_obj = $dao->getEvents();
   $events_arr = array_map(function ($event) {
     return [
       'title' => $event->getTitle(),
@@ -83,6 +85,26 @@ spl_autoload_register(
   }, $events_obj);
 
   $events_json = json_encode($events_arr);
+
+  // user's saved events
+  $currentUser = $dao->getUserId($_SESSION["username"]);
+  $user_events_obj = $dao->getUsersEvents($currentUser);
+
+  $user_events_arr = array_map(function ($events) {
+    return [
+        'title' => $events->getTitle(),
+        'category' => $events->getCategory(),
+        'date' => $events->getDate(),
+        'start_time' => $events->getStartTime(),
+        'end_time' => $events->getEndTime(),
+        'location' => $events->getLocation(),
+        'picture' => $events->getPicture(),
+        'startISO' => $events->getStartISO(),
+        'endISO' => $events->getEndISO(),
+    ];
+  }, $user_events_obj);
+
+  $user_events_json = json_encode($user_events_arr);
 
 ?>
 <script>
@@ -103,13 +125,18 @@ document.addEventListener('DOMContentLoaded', () => {
 let events = <?= $events_json ?>;
 console.log(events);
 
+let user_events = <?= $user_events_json ?>;
+console.log(user_events);
+
 /* =========================
    Local “My Events” store
    ========================= */
 const MY_EVENTS_KEY = 'smu_my_events_v1';
-const loadMyEvents = () => { try { return JSON.parse(localStorage.getItem(MY_EVENTS_KEY)) || [] } catch { return [] } };
+const loadMyEvents = user_events;
 const saveMyEvents = (list) => localStorage.setItem(MY_EVENTS_KEY, JSON.stringify(list));
 const keyOf = (ev) => `${ev.title}__${ev.startISO}`;
+
+console.log(loadMyEvents);
 
 /* Clash with ANY saved event (excluding itself if saved) */
 function clashesWithOthers(eventObj, savedList){
@@ -203,7 +230,8 @@ function renderCarousel(list){
   if (!inner || !dots) return;
 
   inner.innerHTML = ''; dots.innerHTML = '';
-  const saved = loadMyEvents();
+  // finds the events that are saved and loads them
+  const saved = loadMyEvents;
 
   for (let i = 0; i < list.length; i += 4) {
     const chunk = list.slice(i, i + 4);
@@ -266,7 +294,7 @@ document.addEventListener('click', (e) => {
       endISO: gbtn.dataset.end,
       location: gbtn.dataset.location
     };
-    if (clashesWithOthers(payload, loadMyEvents())) return; // safety net
+    if (clashesWithOthers(payload, loadMyEvents)) return; // safety net
     window.open(googleCalUrl(payload), '_blank', 'noopener');
     return;
   }
@@ -280,9 +308,9 @@ document.addEventListener('click', (e) => {
       endISO: sbtn.dataset.end,
       location: sbtn.dataset.location,
       img: sbtn.dataset.img || '',
-      categories: JSON.parse(sbtn.dataset.categories || '[]')
+      categories: JSON.parse(sbtn.dataset.categories || '')
     };
-    const mine = loadMyEvents();
+    const mine = loadMyEvents;
     if (clashesWithOthers(item, mine)) return; // block on clash
     if (!mine.some(m => keyOf(m) === keyOf(item))) {
       mine.push(item);
