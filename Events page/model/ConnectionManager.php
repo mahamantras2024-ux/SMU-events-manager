@@ -9,9 +9,11 @@ class ConnectionManager
         $username = 'root';
         $password = '';
         $port = 3306;
-        $url  = "mysql:host=$servername;dbname=$dbname;port=$port";
 
-        return new PDO($url, $username, $password);
+        $conn  = new PDO("mysql:host=$servername;dbname=$dbname;port=$port", $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // if fail, exception will be thrown
+
+        return $conn;
     }
 }
 
