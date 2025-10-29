@@ -69,8 +69,38 @@ class EventCollectionDAO
     }
 
     // add event to user
-    // public function userAddEvent()
+    public function userAddEvent($personID, $eventID) {
+        $connMgr = new ConnectionManager();
+		$conn = $connMgr->getConnection();
 
+		$sql = 'INSERT INTO event_person VALUES
+				(:personID, :eventID)';
+		$stmt = $conn->prepare($sql);
+		$stmt->bindParam(':personID', $personID, PDO::PARAM_INT);
+		$stmt->bindParam(':eventID', $eventID, PDO::PARAM_INT);
+
+		$stmt->execute();
+		$stmt = null;
+		$conn = null;
+    }
+
+    // remove event from user
+    public function userRemoveEvent($personID, $eventID) {
+        $connMgr = new ConnectionManager();
+		$conn = $connMgr->getConnection();
+
+		$sql = 'DELETE FROM event_person VALUES
+                WHERE person_id = :personID and event_id = :eventID';
+		$stmt = $conn->prepare($sql);
+		$stmt->bindParam(':personID', $personID, PDO::PARAM_INT);
+		$stmt->bindParam(':eventID', $eventID, PDO::PARAM_INT);
+
+		$stmt->execute();
+		$stmt = null;
+		$conn = null;
+    }
+
+    // get user ID from their login username
     public function getUserId($username) {
         $connMgr = new ConnectionManager();
         $conn = $connMgr->getConnection();

@@ -16,6 +16,8 @@ spl_autoload_register(
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="events_style.css">
+
+  <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
 </head>
 <body>
 
@@ -72,6 +74,7 @@ spl_autoload_register(
   $events_obj = $dao->getEvents();
   $events_arr = array_map(function ($event) {
     return [
+      'id' => $event->getId(),
       'title' => $event->getTitle(),
       'category' => $event->getCategory(),
       'date' => $event->getDate(),
@@ -92,6 +95,7 @@ spl_autoload_register(
 
   $user_events_arr = array_map(function ($events) {
     return [
+        'id' => $events->getId(),
         'title' => $events->getTitle(),
         'category' => $events->getCategory(),
         'date' => $events->getDate(),
@@ -133,7 +137,7 @@ console.log(user_events);
    ========================= */
 const MY_EVENTS_KEY = 'smu_my_events_v1';
 const loadMyEvents = user_events;
-const saveMyEvents = (list) => localStorage.setItem(MY_EVENTS_KEY, JSON.stringify(list));
+
 const keyOf = (ev) => `${ev.title}__${ev.startISO}`;
 
 console.log(loadMyEvents);
@@ -211,6 +215,7 @@ function cardTemplate(e, isSaved, hasClashAgainstOthers){
          type="button"
          ${saveDisabled}
          data-save-local
+         data-eid="${e.id}"
          data-title="${e.title}"
          data-location="${e.location}"
          data-start="${e.startISO}"
@@ -302,7 +307,9 @@ document.addEventListener('click', (e) => {
   // Save to My Events
   const sbtn = e.target.closest('[data-save-local]');
   if (sbtn) {
+    console.log(sbtn);
     const item = {
+      id: sbtn.dataset.eid,
       title: sbtn.dataset.title,
       startISO: sbtn.dataset.start,
       endISO: sbtn.dataset.end,
@@ -314,11 +321,33 @@ document.addEventListener('click', (e) => {
     if (clashesWithOthers(item, mine)) return; // block on clash
     if (!mine.some(m => keyOf(m) === keyOf(item))) {
       mine.push(item);
-      saveMyEvents(mine);
+      // saveMyEvents(mine);  // add event to sql event_person table
+      storeEvents(item.id);
     }
     applyFilter(); // refresh to update Saved/disabled states
   }
 });
+
+function storeEvents(eid) {
+  let userID = <?= $currentUser ?>;
+  let url = "axios/sql_updating.php";
+
+  axios.get(url, { params:
+    {
+    "personID": userID,
+    "eventID": eid,
+    "option": "add"
+    }
+  })
+    .then(response => {
+        console.log(response);
+        
+    })
+    .catch(error => {
+        console.log(error.message);
+    });
+
+}
 
 /* Initial render */
 applyFilter();

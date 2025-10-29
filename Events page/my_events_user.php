@@ -1,6 +1,5 @@
 <?php
 session_start();
-var_dump($_SESSION);
 spl_autoload_register(
   function ($class) {
     require_once "model/$class.php";
@@ -17,6 +16,8 @@ spl_autoload_register(
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="events_style.css?v=3">
+
+  <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
 </head>
 <body>
 <div class="container py-4 px-4 my-events">
@@ -43,6 +44,7 @@ spl_autoload_register(
 
   $user_events_arr = array_map(function ($events) {
     return [
+      'id' => $events->getId(),
       'title' => $events->getTitle(),
       'category' => $events->getCategory(),
       'date' => $events->getDate(),
@@ -107,7 +109,7 @@ function card(e){
           <a class="btn btn-primary btn-sm" href="${googleCalUrl(e)}" target="_blank" rel="noopener">
             <i class="bi bi-calendar-plus me-1"></i>Add to Google
           </a>
-          <button class="btn btn-outline-danger btn-sm" data-remove="${e.title}|${e.startISO}">
+          <button class="btn btn-outline-danger btn-sm" data-eid="${e.id}" data-remove="${e.title}|${e.startISO}">
             <i class="bi bi-x-circle me-1"></i>Remove
           </button>
         </div>
@@ -133,7 +135,7 @@ function render(){
 
 document.getElementById('clearAll').addEventListener('click', () => {
   if (confirm('Clear all saved events?')) {
-    saveMyEvents([]);
+    saveMyEvents([]);   // todo
     render();
   }
 });
@@ -143,9 +145,31 @@ document.addEventListener('click', (e) => {
   if (!btn) return;
   const [title, startISO] = btn.dataset.remove.split('|');
   const list = loadMyEvents.filter(ev => !(ev.title === title && ev.startISO === startISO));
-  saveMyEvents(list);
+  console.log(btn.dataset.eid);
+  storeEvents(btn.dataset.eid);
   render();
 });
+
+function storeEvents(eventID) {
+  let userID = <?= $currentUser ?>;
+  let url = "axios/sql_updating.php";
+
+  axios.get(url, { params:
+    {
+    "personID": userID,
+    "eventID": eventID,
+    "option": "remove"
+    }
+  })
+    .then(response => {
+        console.log(response.data);
+        
+    })
+    .catch(error => {
+        console.log(error.message);
+    });
+
+}
 
 render();
 </script>
