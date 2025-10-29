@@ -35,7 +35,7 @@ spl_autoload_register(
       <a class="nav-item nav-link ula nvit" href="#">Account</a>
       <a class="nav-item nav-link ula nvit" href="my_events_user.html">My Events</a>
     </div>
-      <div class="navbar-nav ms-auto"><a class="nav-item nav-link ula nvit me-3" id="logout" href="Login.html">Logout</a></div>
+      <div class="navbar-nav ms-auto"><a class="nav-item nav-link ula nvit me-3" id="logout" href="Login.php">Logout</a></div>
   </div>
   </nav>
 
