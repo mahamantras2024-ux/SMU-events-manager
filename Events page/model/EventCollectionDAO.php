@@ -16,6 +16,7 @@ class EventCollectionDAO
         $events = [];
         while ($row = $stmt->fetch()) {
             $events[] = new Event(
+                $row["id"],
                 $row["title"],
                 $row["category"],
                 $row["date"],
@@ -65,4 +66,7 @@ class EventCollectionDAO
         return $events;
 
     }
+
+    // add event to user
+    // public function userAddEvent()
 }
