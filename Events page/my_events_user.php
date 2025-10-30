@@ -63,7 +63,7 @@ spl_autoload_register(
 <script>
 // Shared with events page
 const MY_EVENTS_KEY = 'smu_my_events_v1';
-const loadMyEvents = <?= $user_events_json ?>;
+let loadMyEvents = <?= $user_events_json ?>;
 const saveMyEvents = (list) => localStorage.setItem(MY_EVENTS_KEY, JSON.stringify(list));
 
 // same category→accent map used on events page
@@ -120,8 +120,8 @@ function card(e){
 
 
 
-function render(){
-  const list = loadMyEvents;
+function render(list){
+  // const list = loadMyEvents;
   const cont = document.getElementById('myEventsContainer');
   const empty = document.getElementById('emptyState');
   if (!list.length) {
@@ -135,8 +135,10 @@ function render(){
 
 document.getElementById('clearAll').addEventListener('click', () => {
   if (confirm('Clear all saved events?')) {
-    saveMyEvents([]);   // todo
-    render();
+    loadMyEvents = [];   // todo
+    // axios for removing everything in sql database
+    removeAllEvents();
+    render(loadMyEvents);
   }
 });
 
@@ -144,13 +146,14 @@ document.addEventListener('click', (e) => {
   const btn = e.target.closest('[data-remove]');
   if (!btn) return;
   const [title, startISO] = btn.dataset.remove.split('|');
-  const list = loadMyEvents.filter(ev => !(ev.title === title && ev.startISO === startISO));
+  const updatedList = loadMyEvents.filter(ev => !(ev.title === title && ev.startISO === startISO));
   console.log(btn.dataset.eid);
-  storeEvents(btn.dataset.eid);
-  render();
+  removeEvents(btn.dataset.eid);
+  render(updatedList);
 });
 
-function storeEvents(eventID) {
+
+function removeEvents(eventID) {
   let userID = <?= $currentUser ?>;
   let url = "axios/sql_updating.php";
 
@@ -168,10 +171,30 @@ function storeEvents(eventID) {
     .catch(error => {
         console.log(error.message);
     });
-
 }
 
-render();
+function removeAllEvents() {
+  let userID = <?= $currentUser ?>;
+  let url = "axios/sql_updating.php";
+
+  axios.get(url, { params:
+    {
+    "personID": userID,
+    "option": "removeAll"
+    }
+  })
+    .then(response => {
+        console.log(response.data);
+        
+    })
+    .catch(error => {
+        console.log(error.message);
+    });
+}
+
+
+
+render(loadMyEvents);
 </script>
 </body>
 </html>

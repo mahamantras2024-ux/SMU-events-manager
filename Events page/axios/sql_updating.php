@@ -18,9 +18,14 @@ spl_autoload_register(
         $dao->userAddEvent($personID, $eventID);
         echo "Event $eventID added";
     }
+
     if ($option == "remove") {
         $dao->userRemoveEvent($personID, $eventID);
         echo "Event $eventID removed";
     }
-   
+
+    if ($option == "removeAll") {
+        $dao->removeAllEvents($personID);
+        echo "All events removed";
+    }
 ?>

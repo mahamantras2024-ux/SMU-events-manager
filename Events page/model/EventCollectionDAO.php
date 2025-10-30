@@ -89,7 +89,7 @@ class EventCollectionDAO
         $connMgr = new ConnectionManager();
 		$conn = $connMgr->getConnection();
 
-		$sql = 'DELETE FROM event_person VALUES
+		$sql = 'DELETE FROM event_person
                 WHERE person_id = :personID and event_id = :eventID';
 		$stmt = $conn->prepare($sql);
 		$stmt->bindParam(':personID', $personID, PDO::PARAM_INT);
@@ -98,6 +98,20 @@ class EventCollectionDAO
 		$stmt->execute();
 		$stmt = null;
 		$conn = null;
+    }
+
+    // remove all events
+    public function removeAllEvents($personID) {
+        $connMgr = new ConnectionManager();
+		$conn = $connMgr->getConnection();
+
+        $sql = 'DELETE FROM event_person WHERE person_id = :personID';
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':personID', $personID, PDO::PARAM_INT);
+
+        $stmt->execute();
+        $stmt = null;
+        $conn = null;
     }
 
     // get user ID from their login username
