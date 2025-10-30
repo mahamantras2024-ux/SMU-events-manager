@@ -1,3 +1,12 @@
+<?php
+session_start();
+spl_autoload_register(
+  function ($class) {
+    require_once "model/$class.php";
+  }
+);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +16,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="events_style.css?v=3">
+
+  <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
 </head>
 <body>
 <div class="container py-4 px-4 my-events">
@@ -24,10 +35,35 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<?php 
+  $dao = new EventCollectionDAO();
+
+  $currentUser = $dao->getUserId($_SESSION["username"]);
+  $user_events_obj = $dao->getUsersEvents($currentUser);
+
+  $user_events_arr = array_map(function ($events) {
+    return [
+      'id' => $events->getId(),
+      'title' => $events->getTitle(),
+      'category' => $events->getCategory(),
+      'date' => $events->getDate(),
+      'start_time' => $events->getStartTime(),
+      'end_time' => $events->getEndTime(),
+      'location' => $events->getLocation(),
+      'picture' => $events->getPicture(),
+      'startISO' => $events->getStartISO(),
+      'endISO' => $events->getEndISO(),
+    ];
+  }, $user_events_obj);
+
+  $user_events_json = json_encode($user_events_arr);
+?>
+
 <script>
 // Shared with events page
 const MY_EVENTS_KEY = 'smu_my_events_v1';
-const loadMyEvents = () => { try { return JSON.parse(localStorage.getItem(MY_EVENTS_KEY)) || [] } catch { return [] } };
+let loadMyEvents = <?= $user_events_json ?>;
 const saveMyEvents = (list) => localStorage.setItem(MY_EVENTS_KEY, JSON.stringify(list));
 
 // same category→accent map used on events page
@@ -55,12 +91,13 @@ function formatRange(startISO, endISO){
 }
 
 function card(e){
+  console.log(e);
   const {dateText, timeText} = formatRange(e.startISO, e.endISO);
-  const img = e.img || 'placeholder.jpg';
+  const picture = e.picture || 'placeholder.jpg';
   return `
   <div class="col">
     <div class="event-card">
-      <img class="event-thumb" src="${img}" alt="${e.title}">
+      <img class="event-thumb" src="${picture}" alt="${e.title}">
       <div class="event-body">
         <h5 class="event-title">${e.title}</h5>
         <ul class="meta-list">
@@ -72,7 +109,7 @@ function card(e){
           <a class="btn btn-primary btn-sm" href="${googleCalUrl(e)}" target="_blank" rel="noopener">
             <i class="bi bi-calendar-plus me-1"></i>Add to Google
           </a>
-          <button class="btn btn-outline-danger btn-sm" data-remove="${e.title}|${e.startISO}">
+          <button class="btn btn-outline-danger btn-sm" data-eid="${e.id}" data-remove="${e.title}|${e.startISO}">
             <i class="bi bi-x-circle me-1"></i>Remove
           </button>
         </div>
@@ -83,8 +120,8 @@ function card(e){
 
 
 
-function render(){
-  const list = loadMyEvents();
+function render(list){
+  // const list = loadMyEvents;
   const cont = document.getElementById('myEventsContainer');
   const empty = document.getElementById('emptyState');
   if (!list.length) {
@@ -98,8 +135,10 @@ function render(){
 
 document.getElementById('clearAll').addEventListener('click', () => {
   if (confirm('Clear all saved events?')) {
-    saveMyEvents([]);
-    render();
+    loadMyEvents = [];   // todo
+    // axios for removing everything in sql database
+    removeAllEvents();
+    render(loadMyEvents);
   }
 });
 
@@ -107,12 +146,55 @@ document.addEventListener('click', (e) => {
   const btn = e.target.closest('[data-remove]');
   if (!btn) return;
   const [title, startISO] = btn.dataset.remove.split('|');
-  const list = loadMyEvents().filter(ev => !(ev.title === title && ev.startISO === startISO));
-  saveMyEvents(list);
-  render();
+  const updatedList = loadMyEvents.filter(ev => !(ev.title === title && ev.startISO === startISO));
+  console.log(btn.dataset.eid);
+  removeEvents(btn.dataset.eid);
+  render(updatedList);
 });
 
-render();
+
+function removeEvents(eventID) {
+  let userID = <?= $currentUser ?>;
+  let url = "axios/sql_updating.php";
+
+  axios.get(url, { params:
+    {
+    "personID": userID,
+    "eventID": eventID,
+    "option": "remove"
+    }
+  })
+    .then(response => {
+        console.log(response.data);
+        
+    })
+    .catch(error => {
+        console.log(error.message);
+    });
+}
+
+function removeAllEvents() {
+  let userID = <?= $currentUser ?>;
+  let url = "axios/sql_updating.php";
+
+  axios.get(url, { params:
+    {
+    "personID": userID,
+    "option": "removeAll"
+    }
+  })
+    .then(response => {
+        console.log(response.data);
+        
+    })
+    .catch(error => {
+        console.log(error.message);
+    });
+}
+
+
+
+render(loadMyEvents);
 </script>
 </body>
 </html>

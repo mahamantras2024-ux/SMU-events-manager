@@ -1,6 +1,7 @@
 <?php
 
 class Event {
+    private $id;
     private $title;
     private $category;
     private $date;
@@ -13,7 +14,8 @@ class Event {
 
 
     
-    public function __construct($title, $category, $date, $start_time, $end_time, $location, $picture, $startISO, $endISO){
+    public function __construct($id, $title, $category, $date, $start_time, $end_time, $location, $picture, $startISO, $endISO){
+        $this->id = $id;
         $this->title = $title;
         $this->category = $category;
         $this->date = $date;
@@ -23,6 +25,10 @@ class Event {
         $this->picture = $picture;
         $this->startISO = $startISO;
         $this->endISO = $endISO;
+    }
+
+    public function getId() {
+        return $this->id;
     }
 
     public function getTitle(){
@@ -64,4 +70,3 @@ class Event {
 }
 
 ?>
-

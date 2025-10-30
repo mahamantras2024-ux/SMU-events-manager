@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- create events
 CREATE TABLE IF NOT EXISTS events (
+    id              integer auto_increment,
     title           VARCHAR(128) NOT NULL,
     category        VARCHAR(128) NOT NULL,
     date            DATE NOT NULL,
@@ -27,10 +28,10 @@ CREATE TABLE IF NOT EXISTS events (
     picture         VARCHAR(128) NOT NULL,
     startISO        VARCHAR(128) NOT NULL,
     endISO          VARCHAR(128) NOT NULL,
-    PRIMARY KEY(title)
+    PRIMARY KEY(id)
 );
 
-INSERT INTO events VALUES (
+INSERT INTO events (title, category, date, start_time, end_time, location, picture, startISO, endISO) VALUES (
     'HackSMU: 24-Hour Hackathon',
     'tech',
     '2025-12-05',
@@ -42,7 +43,7 @@ INSERT INTO events VALUES (
     '2025-12-06T19:00:00+08:00'
 );
 
-INSERT INTO events VALUES (
+INSERT INTO events (title, category, date, start_time, end_time, location, picture, startISO, endISO) VALUES (
     'Open Mic & Poetry Slam',
     'arts',
     '2025-12-12',
@@ -54,7 +55,7 @@ INSERT INTO events VALUES (
     '2025-12-12T22:30:00+08:00'
 );
 
-INSERT INTO events VALUES (
+INSERT INTO events (title, category, date, start_time, end_time, location, picture, startISO, endISO) VALUES (
     'Finance Forum: Markets 2025',
     'career',
     '2025-12-10',
@@ -66,7 +67,7 @@ INSERT INTO events VALUES (
     '2025-12-10T19:30:00+08:00'
 );
 
-INSERT INTO events VALUES (
+INSERT INTO events (title, category, date, start_time, end_time, location, picture, startISO, endISO) VALUES (
     'Skatathon 2025',
     'sports',
     '2025-12-19',
@@ -78,7 +79,7 @@ INSERT INTO events VALUES (
     '2025-12-19T21:00:00+08:00'
 );
 
-INSERT INTO events VALUES (
+INSERT INTO events (title, category, date, start_time, end_time, location, picture, startISO, endISO) VALUES (
     'Art Jamming & Chill',
     'arts',
     '2025-11-22',
@@ -90,7 +91,7 @@ INSERT INTO events VALUES (
     '2025-11-22T17:00:00+08:00'
 );
 
-INSERT INTO events VALUES (
+INSERT INTO events (title, category, date, start_time, end_time, location, picture, startISO, endISO) VALUES (
     'AI & Robotics Demo Day',
     'tech',
     '2025-12-06',
@@ -102,7 +103,7 @@ INSERT INTO events VALUES (
     '2025-12-06T13:00:00+08:00'
 );
 
-INSERT INTO events VALUES (
+INSERT INTO events (title, category, date, start_time, end_time, location, picture, startISO, endISO) VALUES (
     'Eco-Smart Upcycling Workshop',
     'arts',
     '2025-12-13',
@@ -114,7 +115,7 @@ INSERT INTO events VALUES (
     '2025-12-13T18:00:00+08:00'
 );
 
-INSERT INTO events VALUES (
+INSERT INTO events (title, category, date, start_time, end_time, location, picture, startISO, endISO) VALUES (
     'Career Coffee Chats',
     'career',
     '2025-12-04',
@@ -125,3 +126,17 @@ INSERT INTO events VALUES (
     '2025-12-04T16:00:00+08:00',
     '2025-12-04T18:00:00+08:00'
 );
+
+
+CREATE TABLE IF NOT EXISTS event_person (
+    person_id           integer NOT NULL,
+    event_id            integer NOT NULL,
+    PRIMARY KEY (person_id, event_id),
+    KEY person_id (person_id)       -- line needed for faster filtering for a person's events
+);
+
+-- hard coded saved events for testing
+INSERT INTO event_person VALUES
+(1, 2),
+(1, 6),
+(2, 3);
