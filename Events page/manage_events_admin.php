@@ -1,3 +1,16 @@
+<?php
+  session_start();
+  if (!($_SESSION['role']=='admin')){
+  echo "
+  <script>
+    alert('Unauthorised access!');
+    window.location.href = 'Login.php';
+  </script>";
+
+  exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +39,7 @@
       <a class="nav-item nav-link ula nvit" href="#">Statistics</a>
       <a class="nav-item nav-link ula nvit" href="#">Chat</a>
     </div>
-      <div class="navbar-nav ms-auto"><a class="nav-item nav-link ula nvit me-3" id="logout" href="Login.php">Logout</a></div>
+      <div class="navbar-nav ms-auto"><a class="nav-item nav-link ula nvit me-3" id="logout" href="logout.php">Logout</a></div>
   </div>
   </nav>
 

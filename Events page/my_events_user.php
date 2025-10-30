@@ -1,5 +1,16 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['username'])){
+  echo "
+  <script>
+    alert('Please login to access this page');
+    window.location.href = 'Login.php';
+  </script>";
+
+  exit();
+}
+
 spl_autoload_register(
   function ($class) {
     require_once "model/$class.php";

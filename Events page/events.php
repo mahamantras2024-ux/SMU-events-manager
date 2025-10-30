@@ -5,6 +5,16 @@ spl_autoload_register(
     require_once "model/$class.php";
   }
 );
+
+if (!isset($_SESSION['username'])){
+  echo "
+  <script>
+    alert('Please login to access this page');
+    window.location.href = 'Login.php';
+  </script>";
+
+  exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +48,7 @@ spl_autoload_register(
       <a class="nav-item nav-link ula nvit" href="#">Account</a>
       <a class="nav-item nav-link ula nvit" href="my_events_user.php">My Events</a>
     </div>
-      <div class="navbar-nav ms-auto"><a class="nav-item nav-link ula nvit me-3" id="logout" href="Login.php">Logout</a></div>
+      <div class="navbar-nav ms-auto"><a class="nav-item nav-link ula nvit me-3" id="logout" href="logout.php">Logout</a></div>
   </div>
   </nav>
 

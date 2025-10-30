@@ -36,14 +36,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // redirect for user
             if ($role == 'user') {
             echo "<script>
-                    alert('Login successful! Welcome, {$user['username']}');
                     window.location.href = 'events.php';
                   </script>";
             exit;
             // redirect for admin
             } else {
               echo "<script>
-                    alert('Login successful! Welcome, {$user['username']}');
                     window.location.href = 'manage_events_admin.html';
                   </script>";
               exit;
