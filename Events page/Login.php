@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // redirect for admin
             } else {
               echo "<script>
-                    window.location.href = 'manage_events_admin.html';
+                    window.location.href = 'manage_events_admin.php';
                   </script>";
               exit;
             }
