@@ -146,7 +146,7 @@ function render(list){
 
 document.getElementById('clearAll').addEventListener('click', () => {
   if (confirm('Clear all saved events?')) {
-    loadMyEvents = [];   // todo
+    loadMyEvents = [];
     // axios for removing everything in sql database
     removeAllEvents();
     render(loadMyEvents);
@@ -154,13 +154,15 @@ document.getElementById('clearAll').addEventListener('click', () => {
 });
 
 document.addEventListener('click', (e) => {
-  const btn = e.target.closest('[data-remove]');
+  let btn = e.target.closest('[data-remove]');
   if (!btn) return;
-  const [title, startISO] = btn.dataset.remove.split('|');
-  const updatedList = loadMyEvents.filter(ev => !(ev.title === title && ev.startISO === startISO));
+  let [title, startISO] = btn.dataset.remove.split('|');
+  loadMyEvents = loadMyEvents.filter(ev => !(ev.title === title && ev.startISO === startISO));
   console.log(btn.dataset.eid);
   removeEvents(btn.dataset.eid);
-  render(updatedList);
+
+  console.log(loadMyEvents);
+  render(loadMyEvents);
 });
 
 
