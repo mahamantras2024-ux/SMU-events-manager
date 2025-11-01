@@ -23,45 +23,49 @@
 </head>
 <body>
 
-<div class="container py-4">
-  <div class="wbname">
-    <h1>Omni</h1>
-  </div>
-  <br>
+<div class="container-fluid h-100">
+  <div class="row h-100">
 
-  <nav class="navbar navbar-expand-lg navbar-light" id="navbarid">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav" id="navitems">
-      <a class="nav-item nav-link ula nvit" href="#">Manage Events </a>
-      <a class="nav-item nav-link ula nvit" href="#">Statistics</a>
-      <a class="nav-item nav-link ula nvit" href="#">Chat</a>
+    <!-- sidebar -->
+    <aside class="col-auto sidebar d-flex flex-column p-4" id="navbarid">
+      <ul class="navbar-nav ps-0">
+        <div class="navbar-nav" id="navitems">
+        <a class="nav-item nav-link ula nvit" href="#">Manage Events </a>
+        <a class="nav-item nav-link ula nvit" href="#">Statistics</a>
+        <a class="nav-item nav-link ula nvit" href="#">Chat</a>
+        <a class="nav-item nav-link ula nvit" id="logout" href="logout.php">Logout</a>
+      </ul>
+    </aside>
+
+  <main class="col d-flex flex-column p-0">
+    <header class="top-nav d-flex justify-content-center align-items-center px-4 py-3">
+      <div class="wbname">
+        <h1>Omni</h1>
+      </div>
+      <div class="d-flex align-items-end gap-3">
+        <button class="btn btn-outline-primary">
+          <a class="nav-item nav-link ula nvit" id="logout" href="logout.php">Logout</a>
+        </button>
+      </div>
+    </header>
+    <br>
+
+    <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6500">
+      <div class="carousel-inner" id="carouselInner"></div>
+      <div class="carousel-indicators" id="carouselDots"></div>
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#eventsCarousel" data-bs-slide="prev">
+        <i class="bi bi-chevron-left"></i>
+        <span class="visually-hidden">Prev</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#eventsCarousel" data-bs-slide="next">
+        <i class="bi bi-chevron-right"></i>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
-      <div class="navbar-nav ms-auto"><a class="nav-item nav-link ula nvit me-3" id="logout" href="logout.php">Logout</a></div>
-  </div>
-  </nav>
 
-  <div class="d-flex justify-content-end my-3">
-    <button class="btn btn-outline-primary">
-      + Add Event
-    </button>
-  </div>
-
-  <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6500">
-    <div class="carousel-inner" id="carouselInner"></div>
-    <div class="carousel-indicators" id="carouselDots"></div>
-
-    <button class="carousel-control-prev" type="button" data-bs-target="#eventsCarousel" data-bs-slide="prev">
-      <i class="bi bi-chevron-left"></i>
-      <span class="visually-hidden">Prev</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#eventsCarousel" data-bs-slide="next">
-      <i class="bi bi-chevron-right"></i>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
+  </main>
+  </div> 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
