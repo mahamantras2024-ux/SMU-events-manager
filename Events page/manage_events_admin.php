@@ -1,14 +1,42 @@
 <?php
   session_start();
-  if (!($_SESSION['role']=='admin')){
-  echo "
-  <script>
-    alert('Unauthorised access!');
-    window.location.href = 'Login.php';
-  </script>";
+  spl_autoload_register(
+    function ($class) {
+      require_once "model/$class.php";
+    }
+  );
 
-  exit();
-}
+  if (!($_SESSION['role']=='admin')){
+    echo "
+    <script>
+      alert('Unauthorised access!');
+      window.location.href = 'Login.php';
+    </script>";
+
+    exit();
+  }
+
+  $dao = new EventCollectionDAO();
+
+  $userID = $dao->getUserId($_SESSION["username"]);
+
+  // get the admin's events
+  $user_events_obj = $dao->getUsersEvents($userID);
+  $user_events_arr = array_map(function ($events) {
+    return [
+        'id' => $events->getId(),
+        'title' => $events->getTitle(),
+        'category' => $events->getCategory(),
+        'date' => $events->getDate(),
+        'start_time' => $events->getStartTime(),
+        'end_time' => $events->getEndTime(),
+        'location' => $events->getLocation(),
+        'picture' => $events->getPicture(),
+        'startISO' => $events->getStartISO(),
+        'endISO' => $events->getEndISO(),
+    ];
+  }, $user_events_obj);
+  $user_events_json = json_encode($user_events_arr);
 ?>
 
 <!DOCTYPE html>
@@ -163,10 +191,12 @@ document.addEventListener('DOMContentLoaded', () => {
 /* =========================
    DATA (with ISO datetimes)
    ========================= */
-const events = [
-  {title:"HackSMU: 24-Hour Hackathon",dateText:"Fri, 5 Dec 2025",timeText:"7:00 PM → Sat, 7:00 PM",locText:"SIS Building",img:"hackathon.png",categories:["tech"],startISO:"2025-12-05T19:00:00+08:00",endISO:"2025-12-06T19:00:00+08:00"},
-  {title:"AI & Robotics Demo Day",dateText:"Sat, 6 Dec 2025",timeText:"10:00 AM–1:00 PM",locText:"SMU Labs",img:"robotics.webp",categories:["tech"],startISO:"2025-12-06T10:00:00+08:00",endISO:"2025-12-06T13:00:00+08:00"}
-];
+// const events = [
+//   {title:"HackSMU: 24-Hour Hackathon",dateText:"Fri, 5 Dec 2025",timeText:"7:00 PM - Sat, 7:00 PM",locText:"SIS Building",img:"pictures/hackathon.png",categories:["tech"],startISO:"2025-12-05T19:00:00+08:00",endISO:"2025-12-06T19:00:00+08:00"},
+//   {title:"AI & Robotics Demo Day",dateText:"Sat, 6 Dec 2025",timeText:"10:00 AM - 1:00 PM",locText:"SMU Labs",img:"robotics.webp",categories:["tech"],startISO:"2025-12-06T10:00:00+08:00",endISO:"2025-12-06T13:00:00+08:00"}
+// ];
+let events = <?= $user_events_json ?>;
+console.log(events);
 
 /* =========================
    Helper functions
@@ -175,14 +205,10 @@ function keyOf(e) {
   return `${e.title}|${e.startISO}|${e.endISO}`;
 }
 
-function loadMyEvents() {
-  const data = localStorage.getItem('myEvents');
-  return data ? JSON.parse(data) : [];
-}
-
-function saveMyEvents(list) {
-  localStorage.setItem('myEvents', JSON.stringify(list));
-}
+// use for manage_events_admin
+// function saveMyEvents(list) {
+//   localStorage.setItem('myEvents', JSON.stringify(list));
+// }
 
 function googleCalUrl({title, startISO, endISO, location}) {
   const start = startISO.replace(/[-:]/g,'').split('.')[0];
@@ -195,6 +221,20 @@ function googleCalUrl({title, startISO, endISO, location}) {
     details: ''
   });
   return `https://calendar.google.com/calendar/render?${params}`;
+}
+
+function formatDate(startISO) {
+  const optsDate = {
+    weekday: 'short',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  };
+  const optsTime = { hour:'2-digit', minute:'2-digit' };
+
+  let s = new Date(startISO);
+  let dateText = s.toLocaleDateString(undefined, optsDate);
+  return dateText;
 }
 
 function clashesWithOthers(eventObj, savedList){
@@ -224,7 +264,6 @@ function getEventStatus(event) {
    Card template
    ========================= */
 function cardTemplate(e, isSaved, hasClashAgainstOthers){
-  const categoryClass = (e.categories && e.categories[0]) ? e.categories[0] : '';
   const showClash = !isSaved && hasClashAgainstOthers;
   
   const saveBtnClasses = `btn ${isSaved ? 'btn-success' : (showClash ? 'btn-outline-secondary' : 'btn-outline-primary')} btn-sm`;
@@ -235,12 +274,12 @@ function cardTemplate(e, isSaved, hasClashAgainstOthers){
   <div class="avatars"></div>
   <h4>${e.title}</h4>
   <div class="event-meta">
-    <div><i class="bi bi-calendar2-event"></i> ${e.dateText}</div>
-    <div><i class="bi bi-clock"></i> ${e.timeText}</div>
-    <div><i class="bi bi-geo-alt"></i> ${e.locText}</div>
+    <div><i class="bi bi-calendar2-event"></i> ${formatDate(e.startISO)}</div>
+    <div><i class="bi bi-clock"></i> ${e.start_time} - ${e.end_time}</div>
+    <div><i class="bi bi-geo-alt"></i> ${e.location}</div>
   </div>
   <div class="tags">
-    ${e.categories.map(cat => `<span class="tag purple">${cat}</span>`).join('')}
+    <span class="tag purple">${e.category}</span>
     ${showClash ? `<span class="badge text-bg-danger">Clashes</span>` : ''}
   </div>
   <div class="event-actions mt-2 d-flex gap-2 flex-wrap">
@@ -248,12 +287,13 @@ function cardTemplate(e, isSaved, hasClashAgainstOthers){
        type="button"
        ${saveDisabled}
        data-save-local
+       data-eid="${e.id}"
        data-title="${e.title}"
-       data-location="${e.locText}"
+       data-location="${e.location}"
        data-start="${e.startISO}"
        data-end="${e.endISO}"
-       data-img="${e.img}"
-       data-categories='${JSON.stringify(e.categories)}'>
+       data-img="${e.picture}"
+       data-categories='${JSON.stringify(e.category)}'>
        ${isSaved ? 'Saved' : 'Save'}
     </button>
     <a class="btn btn-outline-secondary btn-sm" href="#">Details</a>
@@ -262,7 +302,7 @@ function cardTemplate(e, isSaved, hasClashAgainstOthers){
 }
 
 function renderSect() {
-  const saved = loadMyEvents();
+  let saved = events;
   const previousCol = document.getElementById('previousEvents');
   const ongoingCol = document.getElementById('ongoingEvents');
   const futureCol = document.getElementById('futureEvents');
@@ -303,6 +343,7 @@ document.addEventListener('click', (e) => {
   const sbtn = e.target.closest('[data-save-local]');
   if (sbtn) {
     const item = {
+      id: sbtn.dataset.eid,
       title: sbtn.dataset.title,
       startISO: sbtn.dataset.start,
       endISO: sbtn.dataset.end,
@@ -310,7 +351,7 @@ document.addEventListener('click', (e) => {
       img: sbtn.dataset.img || '',
       categories: JSON.parse(sbtn.dataset.categories || '[]')
     };
-    const mine = loadMyEvents();
+    const mine = events;
     if (clashesWithOthers(item, mine)) return;
     if (!mine.some(m => keyOf(m) === keyOf(item))) {
       mine.push(item);
