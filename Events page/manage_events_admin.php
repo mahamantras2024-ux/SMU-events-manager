@@ -20,6 +20,94 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="events_style.css">
+  <style>
+    .sect {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+    
+    .sect .column {
+      flex: 1;
+      min-width: 280px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    
+    .sect .column h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    
+    .sect .card {
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    
+    .sect .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .sect .card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .sect .tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .sect .tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    
+    .sect .tag.purple {
+      background: #e9d5ff;
+      color: #7c3aed;
+    }
+    
+    .new-task-btn {
+      margin: 1rem 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background: #0d6efd;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .new-task-btn:hover {
+      background: #0b5ed7;
+    }
+    
+    .event-meta {
+      font-size: 0.85rem;
+      color: #666;
+      margin: 0.5rem 0;
+    }
+    
+    .event-meta i {
+      margin-right: 0.25rem;
+    }
+  </style>
 </head>
 <body>
 
@@ -38,7 +126,7 @@
     </aside>
 
   <main class="col d-flex flex-column p-0">
-    <header class="top-nav d-flex justify-content-center align-items-center px-4 py-3">
+    <header class="top-nav d-flex justify-content-between align-items-center px-4 py-3">
       <div class="wbname">
         <h1>Omni</h1>
       </div>
@@ -48,21 +136,22 @@
         </button>
       </div>
     </header>
-    <br>
 
-    <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6500">
-      <div class="carousel-inner" id="carouselInner"></div>
-      <div class="carousel-indicators" id="carouselDots"></div>
+    <button class="new-task-btn">+ Add new event</button>
 
-      <button class="carousel-control-prev" type="button" data-bs-target="#eventsCarousel" data-bs-slide="prev">
-        <i class="bi bi-chevron-left"></i>
-        <span class="visually-hidden">Prev</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#eventsCarousel" data-bs-slide="next">
-        <i class="bi bi-chevron-right"></i>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
+    <section class="sect" id="sectBoard">
+      <div class="column" id="previousEvents">
+        <h3>Previous</h3>
+      </div>
+
+      <div class="column" id="ongoingEvents">
+        <h3>Ongoing</h3>
+      </div>
+
+      <div class="column" id="futureEvents">
+        <h3>Future</h3>
+      </div>
+    </section>
 
   </main>
   </div> 
@@ -79,138 +168,138 @@ const events = [
   {title:"AI & Robotics Demo Day",dateText:"Sat, 6 Dec 2025",timeText:"10:00 AM–1:00 PM",locText:"SMU Labs",img:"robotics.webp",categories:["tech"],startISO:"2025-12-06T10:00:00+08:00",endISO:"2025-12-06T13:00:00+08:00"}
 ];
 
-/* Clash with ANY saved event (excluding itself if saved) */
+/* =========================
+   Helper functions
+   ========================= */
+function keyOf(e) {
+  return `${e.title}|${e.startISO}|${e.endISO}`;
+}
+
+function loadMyEvents() {
+  const data = localStorage.getItem('myEvents');
+  return data ? JSON.parse(data) : [];
+}
+
+function saveMyEvents(list) {
+  localStorage.setItem('myEvents', JSON.stringify(list));
+}
+
+function googleCalUrl({title, startISO, endISO, location}) {
+  const start = startISO.replace(/[-:]/g,'').split('.')[0];
+  const end = endISO.replace(/[-:]/g,'').split('.')[0];
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: title,
+    dates: `${start}/${end}`,
+    location: location || '',
+    details: ''
+  });
+  return `https://calendar.google.com/calendar/render?${params}`;
+}
+
 function clashesWithOthers(eventObj, savedList){
   const s = new Date(eventObj.startISO).getTime();
   const e = new Date(eventObj.endISO).getTime();
   return savedList.some(m => {
-    if (keyOf(m) === keyOf(eventObj)) return false; // exclude self
+    if (keyOf(m) === keyOf(eventObj)) return false;
     const S = new Date(m.startISO).getTime(), E = new Date(m.endISO).getTime();
     return Math.max(s, S) < Math.min(e, E);
   });
 }
 
 /* =========================
-   UI templates & rendering
+   Determine event status
+   ========================= */
+function getEventStatus(event) {
+  const now = new Date().getTime();
+  const start = new Date(event.startISO).getTime();
+  const end = new Date(event.endISO).getTime();
+  
+  if (end < now) return 'previous';
+  if (start <= now && now <= end) return 'ongoing';
+  return 'future';
+}
+
+/* =========================
+   Card template
    ========================= */
 function cardTemplate(e, isSaved, hasClashAgainstOthers){
   const categoryClass = (e.categories && e.categories[0]) ? e.categories[0] : '';
   const showClash = !isSaved && hasClashAgainstOthers;
-
-  // Disable interactions on clash; Saved state always disabled
-  const addDisabled  = showClash ? 'disabled aria-disabled="true" tabindex="-1"' : '';
+  
+  const saveBtnClasses = `btn ${isSaved ? 'btn-success' : (showClash ? 'btn-outline-secondary' : 'btn-outline-primary')} btn-sm`;
   const saveDisabled = (isSaved || showClash) ? 'disabled aria-disabled="true"' : '';
 
-  const addBtnClasses  = `btn ${showClash ? 'btn-danger' : 'btn-primary'} btn-sm ${showClash ? 'disabled' : ''}`;
-  const saveBtnClasses = `btn ${isSaved ? 'btn-success' : (showClash ? 'btn-outline-secondary' : 'btn-outline-primary')} btn-sm`;
-
   return `
-<div class="event-card ${categoryClass}">
-  <img class="event-thumb" src="${e.img}" alt="${e.title}">
-  <div class="event-body">
-    <div class="d-flex justify-content-between align-items-start">
-      <h5 class="event-title mb-1">${e.title}</h5>
-      ${showClash ? `<span class="badge text-bg-danger">Clashes with My Events</span>` : ``}
-    </div>
-    <ul class="meta-list">
-      <li><i class="bi bi-calendar2-event"></i>${e.dateText}</li>
-      <li><i class="bi bi-clock"></i>${e.timeText}</li>
-      <li><i class="bi bi-geo-alt"></i>${e.locText}</li>
-    </ul>
-    <div class="event-actions d-flex gap-2 flex-wrap">
-      <a class="btn btn-outline-secondary btn-sm" href="#">Details</a>
-      <button class="${saveBtnClasses}"
-         type="button"
-         ${saveDisabled}
-         data-save-local
-         data-title="${e.title}"
-         data-location="${e.locText}"
-         data-start="${e.startISO}"
-         data-end="${e.endISO}"
-         data-img="${e.img}"
-         data-categories='${JSON.stringify(e.categories)}'>
-         ${isSaved ? 'Saved' : 'Save to My Events'}
-      </button>
-    </div>
+<div class="card">
+  <div class="avatars"></div>
+  <h4>${e.title}</h4>
+  <div class="event-meta">
+    <div><i class="bi bi-calendar2-event"></i> ${e.dateText}</div>
+    <div><i class="bi bi-clock"></i> ${e.timeText}</div>
+    <div><i class="bi bi-geo-alt"></i> ${e.locText}</div>
+  </div>
+  <div class="tags">
+    ${e.categories.map(cat => `<span class="tag purple">${cat}</span>`).join('')}
+    ${showClash ? `<span class="badge text-bg-danger">Clashes</span>` : ''}
+  </div>
+  <div class="event-actions mt-2 d-flex gap-2 flex-wrap">
+    <button class="${saveBtnClasses}"
+       type="button"
+       ${saveDisabled}
+       data-save-local
+       data-title="${e.title}"
+       data-location="${e.locText}"
+       data-start="${e.startISO}"
+       data-end="${e.endISO}"
+       data-img="${e.img}"
+       data-categories='${JSON.stringify(e.categories)}'>
+       ${isSaved ? 'Saved' : 'Save'}
+    </button>
+    <a class="btn btn-outline-secondary btn-sm" href="#">Details</a>
   </div>
 </div>`;
 }
 
-function renderCarousel(list){
-  const inner = document.getElementById('carouselInner');
-  const dots  = document.getElementById('carouselDots');
-  if (!inner || !dots) return;
-
-  inner.innerHTML = ''; dots.innerHTML = '';
+function renderSect() {
   const saved = loadMyEvents();
-
-  for (let i = 0; i < list.length; i += 4) {
-    const chunk = list.slice(i, i + 4);
-
-    const cols = chunk.map(ev => {
-      const isSaved = saved.some(m => keyOf(m) === keyOf(ev));
-      const hasClashAgainstOthers = clashesWithOthers(ev, saved);
-      // Use (e, isSaved, hasClashAgainstOthers) — no accentClass
-      return `<div class="col-12 col-sm-6 col-lg-3">${cardTemplate(ev, isSaved, hasClashAgainstOthers)}</div>`;
-    }).join('');
-
-    inner.innerHTML += `
-      <div class="carousel-item${i === 0 ? ' active' : ''}">
-        <div class="row g-3">${cols}</div>
-      </div>`;
-    dots.innerHTML += `
-      <button type="button" data-bs-target="#eventsCarousel"
-              data-bs-slide-to="${i/4}"
-              class="${i===0?'active':''}"
-              aria-label="Slide ${i/4+1}"></button>`;
-  }
+  const previousCol = document.getElementById('previousEvents');
+  const ongoingCol = document.getElementById('ongoingEvents');
+  const futureCol = document.getElementById('futureEvents');
+  
+  // Clear existing cards (keep headers)
+  [previousCol, ongoingCol, futureCol].forEach(col => {
+    const cards = col.querySelectorAll('.card');
+    cards.forEach(card => card.remove());
+  });
+  
+  // Categorize and render events
+  events.forEach(event => {
+    const status = getEventStatus(event);
+    const isSaved = saved.some(m => keyOf(m) === keyOf(event));
+    const hasClashAgainstOthers = clashesWithOthers(event, saved);
+    
+    const cardHtml = cardTemplate(event, isSaved, hasClashAgainstOthers);
+    
+    if (status === 'previous') {
+      previousCol.innerHTML += cardHtml;
+    } else if (status === 'ongoing') {
+      ongoingCol.innerHTML += cardHtml;
+    } else {
+      futureCol.innerHTML += cardHtml;
+    }
+  });
 }
-
-/* =========================
-   Filtering + Carousel init
-   ========================= */
-let current = 'all';
-function applyFilter(){
-  const filtered = current === 'all' ? events : events.filter(e => e.categories.includes(current));
-  renderCarousel(filtered);
-  const el = document.getElementById('eventsCarousel');
-  if (el) bootstrap.Carousel.getOrCreateInstance(el).to(0);
-}
-
-document.getElementById('filters')?.addEventListener('click', (e) => {
-  const chip = e.target.closest('.chip'); if (!chip) return;
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  chip.classList.add('active');
-  current = chip.dataset.filter;
-  applyFilter();
-});
 
 /* =========================
    Click handlers
    ========================= */
 document.addEventListener('click', (e) => {
-  // ignore clicks on disabled controls
   if (e.target.closest('.disabled,[disabled],[aria-disabled="true"]')) {
     e.preventDefault();
     return;
   }
 
-  // Add to Google
-  const gbtn = e.target.closest('[data-add-to-gcal]');
-  if (gbtn) {
-    e.preventDefault();
-    const payload = {
-      title: gbtn.dataset.title,
-      startISO: gbtn.dataset.start,
-      endISO: gbtn.dataset.end,
-      location: gbtn.dataset.location
-    };
-    if (clashesWithOthers(payload, loadMyEvents())) return; // safety net
-    window.open(googleCalUrl(payload), '_blank', 'noopener');
-    return;
-  }
-
-  // Save to My Events
   const sbtn = e.target.closest('[data-save-local]');
   if (sbtn) {
     const item = {
@@ -222,19 +311,18 @@ document.addEventListener('click', (e) => {
       categories: JSON.parse(sbtn.dataset.categories || '[]')
     };
     const mine = loadMyEvents();
-    if (clashesWithOthers(item, mine)) return; // block on clash
+    if (clashesWithOthers(item, mine)) return;
     if (!mine.some(m => keyOf(m) === keyOf(item))) {
       mine.push(item);
       saveMyEvents(mine);
     }
-    applyFilter(); // refresh to update Saved/disabled states
+    renderSect();
   }
 });
 
-/* Initial render */
-applyFilter();
+renderSect();
 
-}); // DOMContentLoaded
+}); 
 </script>
 </body>
 </html>
