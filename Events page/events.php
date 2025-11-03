@@ -15,6 +15,8 @@ if (!isset($_SESSION['username'])){
 
   exit();
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -47,6 +49,7 @@ if (!isset($_SESSION['username'])){
       <!-- <a class="nav-item nav-link ula nvit" href="#">Daily Challenge</a> -->
       <a class="nav-item nav-link ula nvit" href="#">Account</a>
       <a class="nav-item nav-link ula nvit" href="my_events_user.php">My Events</a>
+      <a class="nav-item nav-link ula nvit" href="dashboard.php">Dashboard</a>
     </div>
       <div class="navbar-nav ms-auto"><a class="nav-item nav-link ula nvit me-3" id="logout" href="logout.php">Logout</a></div>
   </div>

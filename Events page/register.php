@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = password_hash($pass, PASSWORD_DEFAULT);
 
     // Insert user
-    $stmt = $conn->prepare("INSERT INTO users (username, password, role, email, year, school, major, club) VALUES (:username, :password, :role, :email, :year, :school, :major, :club)");
+    $stmt = $conn->prepare("INSERT INTO users (username, password, role, email, year, school, major, club, points) VALUES (:username, :password, :role, :email, :year, :school, :major, :club, 0)");
     $stmt->bindValue(':username', $username);
     $stmt->bindValue(':password', $password);
     $stmt->bindValue(':role', $role);

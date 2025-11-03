@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS users (
     major VARCHAR(100),
     password VARCHAR(255) NOT NULL,
     role ENUM('user','admin') DEFAULT 'user',
-    club VARCHAR(100)
+    club VARCHAR(100),
+    points INT
 );
 
 -- create events
@@ -136,7 +137,7 @@ CREATE TABLE IF NOT EXISTS event_person (
 );
 
 -- hard coded saved events for testing
-INSERT INTO event_person VALUES
-(1, 2),
-(1, 6),
-(2, 3);
+-- INSERT INTO event_person VALUES
+-- (1, 2),
+-- (1, 6),
+-- (2, 3);
