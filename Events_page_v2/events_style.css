@@ -1,0 +1,246 @@
+body{ background:#f6f7fb; }
+    
+  .wbname{
+    color: #041373;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: bolder;
+    font-size: larger;
+    display:flex; align-items:center; justify-content:center;
+    padding: 10px;
+  }
+
+    .section-header{ display:flex; align-items:center; justify-content:center; margin-bottom:.75rem; }
+
+    .filters{ display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; margin-bottom:.5rem; }
+    .chip{ border:1px solid #e3e6ef; background:#fff; color:#394150;
+      padding:.35rem .75rem; border-radius:999px; font-weight:600; font-size:.9rem;
+      cursor:pointer; user-select:none; }
+
+    .event-card{ background:#fff; border:1px solid #ececf4; border-radius:14px;
+      overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.06);
+      transition:.18s ease; height:100%; }
+
+    .event-card:hover{ transform:translateY(-3px); box-shadow:0 10px 24px rgba(0,0,0,.1); }
+
+    .tech{
+      border-top:4px solid rgb(115, 185, 192);
+    }
+    .arts{
+      border-top:4px solid rgb(195, 110, 179);
+    }
+    .sports{
+      border-top:4px solid rgb(158, 192, 67);
+    }
+    .career{
+      border-top:4px solid rgb(220, 111, 48);
+    }
+
+     /* --- Chip accent colors --- */
+    .chip.accent-grey {
+      border-color: #616161; color: #616161;
+    }
+    .chip.accent-pink { border-color: rgb(195, 110, 179); color: rgb(195, 110, 179); }
+    .chip.accent-sky { border-color: rgb(115, 185, 192); color: rgb(115, 185, 192); }
+    .chip.accent-mint { border-color: rgb(158, 192, 67); color: rgb(158, 192, 67); }
+    .chip.accent-lav { border-color: rgb(220, 111, 48); color: rgb(220, 111, 48); }
+
+    .chip.accent-grey:hover {
+      background: #616161; color: #fff;
+    }
+    .chip.accent-pink:hover { background: rgb(195, 110, 179); color: #fff; }
+    .chip.accent-sky:hover { background: rgb(115, 185, 192); color: #fff; }
+    .chip.accent-mint:hover { background: rgb(158, 192, 67); color: #fff; }
+    .chip.accent-lav:hover { background: rgb(220, 111, 48); color: #fff; }
+
+    /* Active chip state â€” fills with colour */
+    .chip.accent-grey.active {
+      background: #616161; color: #fff;
+    }
+    .chip.accent-pink.active { background: rgb(195, 110, 179); color: #fff; }
+    .chip.accent-sky.active { background: rgb(115, 185, 192); color: #fff; }
+    .chip.accent-mint.active { background: rgb(158, 192, 67); color: #fff; }
+    .chip.accent-lav.active { background: rgb(220, 111, 48); color: #fff; }
+
+    #navbarid{
+      background-color: #041373;
+      border-width: 2px;
+      margin-bottom: 40px;
+    }
+
+    .nvit{
+      color: rgb(255, 255, 251);
+      font-family:sans-serif;
+    }
+
+    .nvit:hover{
+      color: rgb(191, 156, 96);
+    }
+
+    #navitems{
+      padding-left: 10px;
+      padding-bottom: 1px;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+
+    .ula { 
+      display: inline-block; 
+      position: relative;
+    }
+
+    .ula:after { 
+      content: ''; 
+      position: absolute; 
+      width: 100%; 
+      transform: scaleX(0); 
+      height: 2px; 
+      bottom: 0;
+      left: 0;
+      background-color: rgb(191, 156, 96);
+      transform-origin: bottom right;
+      transition: transform 0.50s ease-out;
+    }
+
+    .ula:hover:after { 
+      transform: scaleX(1); 
+      transform-origin: bottom left;
+    }
+
+
+    #eventsCarousel{
+      margin: 20px;
+    }
+
+    .event-body{ padding:14px 16px; }
+    .event-title{ font-weight:700; font-size:1.06rem; margin:0 0 6px; color:#121926; }
+
+    .meta-list{ list-style:none; padding:0; margin:0 0 12px; }
+    .meta-list li{ display:flex; gap:.55rem; color:#5f6b7a; font-size:.92rem; line-height:1.3; padding:.15rem 0; }
+    .meta-list i{ color:#6e7bff; font-size:1rem; margin-top:.15rem; }
+
+    .carousel-item .row > [class*="col"]{ display:flex; }
+
+    .carousel-control-prev, .carousel-control-next{
+      width:3rem; height:3rem; top:50%; transform:translateY(-50%);
+      background:#ffffff; border:1px solid #e8e8f2; border-radius:50%; opacity:.95;
+    }
+    .carousel-control-prev .bi, .carousel-control-next .bi{ font-size:1.25rem; color:#111; }
+    .carousel-control-prev:hover, .carousel-control-next:hover{ opacity:1; }
+
+    .carousel-indicators{ position:static; margin-top:12px; justify-content:center; }
+    .carousel-indicators [data-bs-target]{ width:12px; height:12px; border-radius:50%; background:#c8cfe0; border:none; }
+    .carousel-indicators .active{ background:#586ae2; }
+
+    /* Stop the row from bleeding outside the slide (which gets clipped) */
+#eventsCarousel .carousel-item .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Make sure cards stretch nicely */
+#eventsCarousel .carousel-item .row > [class*="col-"] {
+  display: flex;
+}
+
+#eventsCarousel .event-card {
+  width: 100%;
+}
+
+/* Keep this page from going billboard-wide */
+.my-events { max-width: 960px; }  /* try 960â€“1040 to taste */
+
+/* Exact layout to match your reference: 1 col on small, 2 cols on md+ */
+.events-grid {
+  display: grid;
+  gap: 1rem;                 /* card-to-card spacing */
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px) {  /* md breakpoint */
+  .events-grid { grid-template-columns: 1fr 1fr; }  /* always 2 columns */
+}
+
+/* Card hygiene â€“ no stretching, clean images */
+.event-card { height: auto; width: 100%; margin: 0; }
+.event-thumb { display: block; width: 100%; height: 160px; object-fit: cover; }
+
+/* Optional: if your earlier CSS set .event-card {height:100%}, override it */
+.event-card { height: auto !important; }
+
+/* one place in your CSS, after .event-card base rules */
+.event-card[class*="accent-"] { border-top: 4px solid transparent; }
+
+.event-card.accent-sky  { border-top-color: rgb(115, 185, 192); }
+.event-card.accent-pink { border-top-color: rgb(195, 110, 179); }
+.event-card.accent-mint { border-top-color: rgb(158, 192, 67); }
+.event-card.accent-lav  { border-top-color: rgb(220, 111, 48); }
+.event-card.accent-grey { border-top-color: #616161; }
+
+
+
+/* --- Card layout normalization --- */
+.event-card{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  border-radius:14px;
+  overflow:hidden;
+}
+
+.event-body{
+  display:flex;
+  flex-direction:column;
+  gap:.25rem;
+  flex:1;
+}
+.event-actions{ margin-top:auto; }
+
+.event-thumb{
+  display:block;
+  width:100%;
+  aspect-ratio: 16 / 9;
+  object-fit:cover;
+}
+
+.event-title {
+  display: -webkit-box;
+  display: box;             /* fallback for newer spec */
+  line-clamp: 2;            /* standard property */
+  -webkit-line-clamp: 2;    /* for Safari and old Chrome */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+.carousel-item .row > [class*="col"]{ display:flex; }
+#eventsCarousel .event-card{ width:100%; }
+
+.container.my-events{
+  max-width: 700px;
+  margin-inline:auto;
+  padding-inline:12px;
+}
+
+.meta-list{ margin:0 0 .5rem; }
+.meta-list li{ padding:.2rem 0; }
+
+.event-card[class*="accent-"]{ border-top:4px solid transparent; }
+.event-card.accent-sky  { border-top-color: rgb(115,185,192); }
+.event-card.accent-pink { border-top-color: rgb(195,110,179); }
+.event-card.accent-mint { border-top-color: rgb(158,192,67); }
+.event-card.accent-lav  { border-top-color: rgb(220,111,48); }
+.event-card.accent-grey { border-top-color:#616161; }
+
+.my-events { max-width: 1300px; margin: 0 auto; }
+#myEventsContainer .col {
+  flex: 1 1 295px;
+  max-width: 295px;
+}
+.event-thumb {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+.event-card {
+  height: auto !important;
+}
