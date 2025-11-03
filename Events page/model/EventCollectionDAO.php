@@ -68,6 +68,32 @@ class EventCollectionDAO
 
     }
 
+    public function getUsers()
+    {
+        $sql = 'select * from users where role = "user"';
+
+        $connMgr = new ConnectionManager();
+        $conn = $connMgr->getConnection();
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $users = [];
+        while ($row = $stmt->fetch()) {
+            $users[] = new User(
+                $row["id"],
+                $row["username"],
+                $row["school"],
+                $row["points"]
+            );
+        }
+
+        $stmt = null;
+        $conn = null;
+        return $users;
+    }
+
     // add event to user
     public function userAddEvent($personID, $eventID) {
         $connMgr = new ConnectionManager();
